@@ -31,7 +31,9 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
     std::vector<Particle> particles = context.getParticles();
     for(int i=0; i<context.getNbParticles(); i++) {
         Particle part = particles[i];
-        QRectF target(part.getX(), part.getY(), this->width()/5, this->height()/5);
+        float ellipseWidth = this->width()/5;
+        float ellipseHeight = this->height()/5;
+        QRectF target(part.getX() - ellipseWidth/2, part.getY() - ellipseHeight/2, ellipseWidth, ellipseHeight);
         painter->drawEllipse(target);
     }
 }
