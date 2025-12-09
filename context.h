@@ -20,8 +20,9 @@ private:
     std::vector<Particle> particles;
 
     void applyExternalForce(float dt);
-    void dampVelocities(float dt);
+    void updateVelocityAndPosition(float dt);
     void updateExpectedPosition(float dt);
+    void dampVelocities(float dt);
     void addDynamicContactConstraints(float dt);
     void addStaticContactConstraints(float dt);
     void projectConstraints();

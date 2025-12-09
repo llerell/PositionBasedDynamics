@@ -19,24 +19,39 @@ std::vector<Particle>& Context::getParticles() {
 // Update the positions of the particles
 // For now only make them fall independantly of the particle
 void Context::updatePhysicalSystem(float dt) {
-    for(int i=0; i<particles.size(); i++) {
-        Particle& part = particles[i];
-        Vec2& pos = part.getPos();
-        float& y = pos.getY();
-        y += 5;
-    }
+    applyExternalForce(dt);
+    updateExpectedPosition(dt);
+    updateVelocityAndPosition(dt);
 }
 
 
 void Context::applyExternalForce(float dt) {
+    // Gravity
+    float m;
+    float g = 9.81;
+    for(int i=0; i<particles.size(); i++) {
+        m = particles[i].getMass();
+        Vec2 Fg = Vec2(0,m*g);
 
-}
-
-void Context::dampVelocities(float dt) {
+        particles[i].getVelocity() = particles[i].getVelocity() + Fg * (dt/m);
+    }
 
 }
 
 void Context::updateExpectedPosition(float dt) {
+    for(int i=0; i<particles.size(); i++) {
+        particles[i].getExpPos() = particles[i].getPos() + particles[i].getVelocity() * dt;
+    }
+}
+
+void Context::updateVelocityAndPosition(float dt) {
+    for(int i=0; i<particles.size(); i++) {
+        particles[i].getVelocity() = particles[i].getPos() - particles[i].getExpPos();
+        particles[i].getPos() = particles[i].getExpPos();
+    }
+}
+
+void Context::dampVelocities(float dt) {
 
 }
 
