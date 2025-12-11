@@ -32,21 +32,21 @@ void Context::applyExternalForce(float dt) {
         m = particles[i].getMass();
         Vec2 Fg = Vec2(0,m*g);
 
-        particles[i].getVelocity() = particles[i].getVelocity() + Fg * (dt/m);
+        particles[i].setVelocity(particles[i].getVelocity() + Fg * (dt/m));
     }
 
 }
 
 void Context::updateExpectedPosition(float dt) {
     for(int i=0; i<particles.size(); i++) {
-        particles[i].getExpPos() = particles[i].getPos() + particles[i].getVelocity() * dt;
+        particles[i].setExpPos(particles[i].getPos() + particles[i].getVelocity() * dt);
     }
 }
 
 void Context::updateVelocityAndPosition(float dt) {
     for(int i=0; i<particles.size(); i++) {
-        particles[i].getVelocity() = particles[i].getExpPos() - particles[i].getPos();
-        particles[i].getPos() = particles[i].getExpPos();
+        particles[i].setVelocity(particles[i].getExpPos() - particles[i].getPos());
+        particles[i].setPos(particles[i].getExpPos());
     }
 }
 
