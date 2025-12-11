@@ -30,7 +30,7 @@ void Context::applyExternalForce(float dt) {
     float g = 9.81;
     for(int i=0; i<particles.size(); i++) {
         m = particles[i].getMass();
-        Vec2 Fg = Vec2(0,m*g);
+        Vec2 Fg = Vec2(0,-m*g);
 
         particles[i].setVelocity(particles[i].getVelocity() + Fg * (dt/m));
     }
