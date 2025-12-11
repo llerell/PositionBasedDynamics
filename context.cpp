@@ -17,7 +17,6 @@ std::vector<Particle>& Context::getParticles() {
 }
 
 // Update the positions of the particles
-// For now only make them fall independantly of the particle
 void Context::updatePhysicalSystem(float dt) {
     applyExternalForce(dt);
     updateExpectedPosition(dt);
@@ -46,7 +45,7 @@ void Context::updateExpectedPosition(float dt) {
 
 void Context::updateVelocityAndPosition(float dt) {
     for(int i=0; i<particles.size(); i++) {
-        particles[i].getVelocity() = particles[i].getPos() - particles[i].getExpPos();
+        particles[i].getVelocity() = particles[i].getExpPos() - particles[i].getPos();
         particles[i].getPos() = particles[i].getExpPos();
     }
 }
