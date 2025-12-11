@@ -18,6 +18,11 @@ Vec2 Vec2::operator*(const float scal) {
     return u;
 }
 
+Vec2 operator*(const float scal, Vec2 const& v) {
+    const Vec2 u = Vec2(scal*v.x, scal*v.y);
+    return u;
+}
+
 std::ostream& Vec2::operator<<(std::ostream& out) {
     return out << this->x << ", " << this->y;
 }

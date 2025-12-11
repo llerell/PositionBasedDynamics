@@ -28,7 +28,7 @@ public slots:
 
 private:
     Ui::MainWindow *ui;
-    // Ui::MainWindow : classe généré automatiquement à partir d’un fichier .ui décrivant le contenu de l’interface graphique
+    // Ui::MainWindow : classe générée automatiquement à partir d’un fichier .ui décrivant le contenu de l’interface graphique
     QPushButton *start_button;
     QLabel *label;
     DrawArea *draw_area;

@@ -6,7 +6,7 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include <QOpenGLFunctions>
-
+#include "vec2.h"
 
 class DrawArea : public QOpenGLWidget
 {
@@ -30,7 +30,15 @@ public:
     // Redraw another ellipse below the precedent
     void animate();
 
+
+
+
+
 private:
+    Vec2 worldToView(Vec2 world_pos);
+
+    Vec2 viewToWorld(Vec2 view_pos);
+
     Context context;
 
 signals:

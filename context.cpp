@@ -21,9 +21,11 @@ std::vector<Particle>& Context::getParticles() {
 void Context::updatePhysicalSystem(float dt) {
     for(int i=0; i<particles.size(); i++) {
         Particle& part = particles[i];
-        Vec2& pos = part.getPos();
-        float& y = pos.getY();
-        y += 5;
+        Vec2 currentPos = part.getPos();
+        Vec2 velocity = part.getVelocity();
+        Vec2 expectedPos = currentPos + dt * velocity;
+
+        part.setPos(expectedPos);
     }
 }
 

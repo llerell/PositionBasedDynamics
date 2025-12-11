@@ -23,15 +23,27 @@ void DrawArea::paintGL() {
     f->glClear(GL_COLOR_BUFFER_BIT);
 }
 
+Vec2 DrawArea::worldToView(Vec2 world_pos){
+    return Vec2 {world_pos.getX(), this->height()-world_pos.getY()};
+}
+
+Vec2 DrawArea::viewToWorld(Vec2 view_pos){
+    return Vec2 {view_pos.getX(), this->height()-view_pos.getY()};
+}
 // Affichage des éléments de la sphère
 void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
     this->paintGL();    // I don't know how to clear out of paintGL()
     painter->setPen(Qt::blue);
     painter->setBrush(QBrush(Qt::red));
     std::vector<Particle> particles = context.getParticles();
+    int width, height;
+    Vec2 pixelPos = {0,0};
+    width = this->width();
+    height = this->height();
     for(int i=0; i<context.getNbParticles(); i++) {
         Particle part = particles[i];
-        QRectF target(part.getX(), part.getY(), this->width()/5, this->height()/5);
+        pixelPos=worldToView(part.getPos());
+        QRectF target(pixelPos.getX()-width/10, pixelPos.getY()-height/10, width/5, height/5);
         painter->drawEllipse(target);
     }
 }
@@ -39,15 +51,16 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
 // Takes the mouse position when there is a double click
 // Then calls the paintEvent method (with update)
 void DrawArea::mouseDoubleClickEvent(QMouseEvent *event) {
-    Vec2 pos = Vec2(event->x(), event->y());
-    Particle particle = Particle(pos, Vec2(0,0), 0, 0);
+    Vec2 pixelPos = Vec2(event->x(), event->y());
+    Vec2 worldPos = worldToView(pixelPos);
+    Particle particle = Particle(worldPos, Vec2(0,-10), 0, 0);
     context.addParticle(particle);
     this->update();
 }
 
 // Redraw another ellipse below the precedent
 void DrawArea::animate() {
-    context.updatePhysicalSystem(10);
+    context.updatePhysicalSystem(0.1);
     this->update();
 }
 
