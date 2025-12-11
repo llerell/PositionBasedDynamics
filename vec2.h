@@ -16,7 +16,7 @@ public:
 
     friend Vec2 operator*(const float scal, Vec2 const& v);
 
-    std::ostream& operator<<(std::ostream& out);
+    friend std::ostream& operator<<(std::ostream& out, Vec2 const& v);
 
     float dotProduct(const Vec2& v);
 

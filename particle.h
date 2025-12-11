@@ -11,24 +11,27 @@ public:
 
     void setPos(Vec2 newPos);
 
-    Vec2 getExpectedPos();
+    Vec2 getVelocity();
 
-    void setExpectedPos(Vec2 newExpPos);
+    void setVelocity(Vec2 newVelocity);
+
+    Vec2 getExpPos();
+  
+    void setExpPos(Vec2 newExpPos);
 
     float getX();
 
     float getY();
 
-    Vec2 getVelocity();
-
-    void setVelocity(Vec2 newVelocity);
+    float getMass();
 
 private:
     Vec2 pos;
-    Vec2 expectedPos;
+    Vec2 expPos;
     Vec2 velocity;
     float rad;
     float mass;
+    
 };
 
 #endif // PARTICLE_H

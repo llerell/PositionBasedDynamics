@@ -53,15 +53,24 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
 void DrawArea::mouseDoubleClickEvent(QMouseEvent *event) {
     Vec2 pixelPos = Vec2(event->x(), event->y());
     Vec2 worldPos = worldToView(pixelPos);
-    Particle particle = Particle(worldPos, Vec2(0,-10), 0, 0);
+    Particle particle = Particle(worldPos, Vec2(0,0), 0, 10);
     context.addParticle(particle);
     this->update();
 }
 
 // Redraw another ellipse below the precedent
 void DrawArea::animate() {
-    context.updatePhysicalSystem(0.1);
+    context.updatePhysicalSystem(1);
     this->update();
+}
+
+
+void worldToView(Vec2& world_pos) {
+    // How?
+}
+
+void viewToWorld(Vec2& view_pos) {
+    // How?
 }
 
 
