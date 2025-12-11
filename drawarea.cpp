@@ -31,7 +31,9 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
     std::vector<Particle> particles = context.getParticles();
     for(int i=0; i<context.getNbParticles(); i++) {
         Particle part = particles[i];
-        QRectF target(part.getX(), part.getY(), this->width()/5, this->height()/5);
+        float ellipseWidth = this->width()/5;
+        float ellipseHeight = this->height()/5;
+        QRectF target(part.getX() - ellipseWidth/2, part.getY() - ellipseHeight/2, ellipseWidth, ellipseHeight);
         painter->drawEllipse(target);
     }
 }
@@ -40,15 +42,24 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
 // Then calls the paintEvent method (with update)
 void DrawArea::mouseDoubleClickEvent(QMouseEvent *event) {
     Vec2 pos = Vec2(event->x(), event->y());
-    Particle particle = Particle(pos, Vec2(0,0), 0, 0);
+    Particle particle = Particle(pos, Vec2(0,0), 1, 10);
     context.addParticle(particle);
     this->update();
 }
 
 // Redraw another ellipse below the precedent
 void DrawArea::animate() {
-    context.updatePhysicalSystem(10);
+    context.updatePhysicalSystem(1);
     this->update();
+}
+
+
+void worldToView(Vec2& world_pos) {
+    // How?
+}
+
+void viewToWorld(Vec2& view_pos) {
+    // How?
 }
 
 
