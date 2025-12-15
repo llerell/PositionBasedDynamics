@@ -32,14 +32,14 @@ public:
 
 
 
-
-
 private:
     Vec2 worldToView(Vec2 world_pos);
 
     Vec2 viewToWorld(Vec2 view_pos);
 
     Context context;
+
+    float heightMeters = 10;
 
 signals:
 };
