@@ -1,12 +1,10 @@
 #include "drawarea.h"
 #include <QOpenGLWidget>
-#include <stdio.h>
 
 DrawArea::DrawArea(QWidget *parent)
     : QOpenGLWidget{parent}
 {
     this->setFixedSize(QSize(750,500));
-    std::cout<< this->height()<< std::endl;
     context = Context();
 }
 
@@ -58,8 +56,6 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
 void DrawArea::mouseDoubleClickEvent(QMouseEvent *event) {
     Vec2 pixelPos = Vec2(event->x(), event->y());
     Vec2 worldPos = viewToWorld(pixelPos);
-    std::cout << "pixel: " << pixelPos << std::endl;
-    std::cout << "world: " << worldPos << std::endl;
     Particle particle = Particle(worldPos, Vec2(0,0), 20, 10);
     context.addParticle(particle);
     this->update();
