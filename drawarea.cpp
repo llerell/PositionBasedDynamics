@@ -1,5 +1,6 @@
 #include "drawarea.h"
 #include <QOpenGLWidget>
+#include <QLine>
 
 DrawArea::DrawArea(QWidget *parent)
     : QOpenGLWidget{parent}
@@ -33,13 +34,24 @@ Vec2 DrawArea::viewToWorld(Vec2 view_pos){
     float y = m_height*(1-view_pos.getY()/(this->height()));
     return Vec2 {m_height*view_pos.getX()/this->height(), y};
 }
+
 // Affichage des éléments de la sphère
 void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
     this->paintGL();    // I don't know how to clear out of paintGL()
+    int height = this->height();
+    int width = this->width();
     painter->setPen(Qt::blue);
     painter->setBrush(QBrush(Qt::red));
     std::vector<Particle> particles = context.getParticles();
-    int height = this->height();
+    for(int i=0; i<context.getColliders().size(); i++) {
+        PlanCollider coll = context.getColliders()[i];
+        Vec2 pc = worldToView(coll.getCenter());
+        Vec2 p1 = Vec2(0,pc.getY());
+        Vec2 p2 = Vec2(width, pc.getY());
+        QLine line(p1.getX(), p1.getY(),p2.getX(), p2.getY());
+        painter->drawLine(line);
+    }
+    
     Vec2 viewPos = Vec2(0,0);
     for(int i=0; i<context.getNbParticles(); i++) {
         Particle part = particles[i];
