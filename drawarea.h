@@ -39,7 +39,7 @@ private:
 
     Context context;
 
-    float heightMeters = 10;
+    float m_height = 10;
 
 signals:
 };
