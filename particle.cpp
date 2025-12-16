@@ -39,3 +39,6 @@ float Particle::getMass() {
     return mass;
 }
 
+float Particle::getRad() {
+    return rad;
+}

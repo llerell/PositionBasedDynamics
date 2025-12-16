@@ -23,8 +23,6 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override; // On peut rajouter override, car le destructeur est virtuel dans la classe parente
 
-public slots:
-    void sayHello(bool clicked);
 
 private:
     Ui::MainWindow *ui;
