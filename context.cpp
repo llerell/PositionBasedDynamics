@@ -60,7 +60,7 @@ void Context::updateExpectedPosition(float dt) {
 
 void Context::updateVelocityAndPosition(float dt) {
     for(int i=0; i<particles.size(); i++) {
-        particles[i].setVelocity(particles[i].getExpPos() - particles[i].getPos());
+        particles[i].setVelocity((particles[i].getExpPos() - particles[i].getPos())*(1/dt));
         particles[i].setPos(particles[i].getExpPos());
     }
 }
