@@ -12,20 +12,14 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);          // initialisation des widgets
 
-    start_button = new QPushButton("Start");
-    label = new QLabel("Currently stopped...");
     draw_area = new DrawArea();
 
     nb_milliseconds = 50;
 
     QVBoxLayout *layout = new QVBoxLayout(ui->centralwidget); // constructor’s parameter is the widget that will use the layout
 
-    layout->addWidget(start_button); // ownership of ptr is transferred
-    layout->addWidget(label);  // ownership of ptr is transferred
     layout->addWidget(draw_area);
 
-
-    QObject::connect(this->start_button, &QPushButton::clicked, this, &MainWindow::sayHello);
 
     // Calls the paintEvent method in drawarea -> Draws an ellipse
     //draw_area->update();
@@ -41,10 +35,4 @@ MainWindow::~MainWindow()
 {
     delete ui;  // nécessaire car par défaut Qt n’utilise pas de unique_ptr, il est donc possible de simplifier légèrement le code généré
 
-}
-
-
-void MainWindow::sayHello(bool clicked)
-{
-    this->label->setText("Hello World!");
 }

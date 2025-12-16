@@ -5,7 +5,7 @@
 DrawArea::DrawArea(QWidget *parent)
     : QOpenGLWidget{parent}
 {
-    this->setFixedSize(QSize(500,200));
+    this->setFixedSize(QSize(750,500));
     context = Context();
 }
 
@@ -14,7 +14,7 @@ void DrawArea::paintEvent(QPaintEvent *event)  {
     this->show(&p, event, context);
 }
 
-void DrawArea::initializeGL() {
+void DrawArea::initializeGL(){
     QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
     f->glClearColor(0.0,0.0,0.0,0.0);
 }
@@ -24,24 +24,25 @@ void DrawArea::paintGL() {
     f->glClear(GL_COLOR_BUFFER_BIT);
 }
 
+// The height of the screen is equivalent to 10m.
 Vec2 DrawArea::worldToView(Vec2 world_pos){
-    return Vec2 {world_pos.getX(), this->height()-world_pos.getY()};
+    float py = (this->height())*(1-world_pos.getY()/m_height);
+    return Vec2 {this->height()*world_pos.getX()/m_height, py};
 }
 
 Vec2 DrawArea::viewToWorld(Vec2 view_pos){
-    return Vec2 {view_pos.getX(), this->height()-view_pos.getY()};
+    float y = m_height*(1-view_pos.getY()/(this->height()));
+    return Vec2 {m_height*view_pos.getX()/this->height(), y};
 }
 
 // Affichage des éléments de la sphère
 void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
     this->paintGL();    // I don't know how to clear out of paintGL()
+    int height = this->height();
+    int width = this->width();
     painter->setPen(Qt::blue);
     painter->setBrush(QBrush(Qt::red));
     std::vector<Particle> particles = context.getParticles();
-    int width, height;
-    Vec2 pixelPos = {0,0};
-    width = this->width();
-    height = this->height();
     for(int i=0; i<context.getColliders().size(); i++) {
         PlanCollider coll = context.getColliders()[i];
         Vec2 pc = worldToView(coll.getCenter());
@@ -50,27 +51,33 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
         QLine line(p1.getX(), p1.getY(),p2.getX(), p2.getY());
         painter->drawLine(line);
     }
+    
+    Vec2 viewPos = Vec2(0,0);
     for(int i=0; i<context.getNbParticles(); i++) {
         Particle part = particles[i];
-        pixelPos=worldToView(part.getPos());
-        QRectF target(pixelPos.getX()-width/10, pixelPos.getY()-height/10, width/5, height/5);
+        viewPos=worldToView(part.getPos());
+        float rad = height*part.getRad()/m_height;
+        QRectF target(viewPos.getX()-rad/2, viewPos.getY()-rad/2, rad, rad);
         painter->drawEllipse(target);
+
     }
 }
 
 // Takes the mouse position when there is a double click
 // Then calls the paintEvent method (with update)
 void DrawArea::mouseDoubleClickEvent(QMouseEvent *event) {
-    Vec2 pixelPos = Vec2(event->x(), event->y());
-    Vec2 worldPos = worldToView(pixelPos);
-    Particle particle = Particle(worldPos, Vec2(20,50), 10, 1);
+    QPointF position = event->position();
+    Vec2 viewPos = Vec2(position.x(), position.y());
+    Vec2 worldPos = viewToWorld(viewPos);
+    Particle particle = Particle(worldPos, Vec2(0,5), 1, 1);
     context.addParticle(particle);
     this->update();
 }
 
 // Redraw another ellipse below the precedent
 void DrawArea::animate() {
-    context.updatePhysicalSystem(1);
+    context.updatePhysicalSystem(0.1);
     this->update();
 }
+
 
