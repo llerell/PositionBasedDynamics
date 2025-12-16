@@ -7,23 +7,25 @@ class Particle
 public:
     Particle(Vec2 pos, Vec2 velocity, float rad, float mass);
 
-    Vec2 getPos();
+    const Vec2 getPos();
 
     void setPos(Vec2 newPos);
 
-    Vec2 getVelocity();
+    const Vec2 getVelocity();
 
     void setVelocity(Vec2 newVelocity);
 
-    Vec2 getExpPos();
+    const Vec2 getExpPos() const;
   
     void setExpPos(Vec2 newExpPos);
 
-    float getX();
+    const float getX();
 
-    float getY();
+    const float getY();
 
-    float getMass();
+    const float getMass();
+
+    const float getRad() const;
 
     float getRad();
 

@@ -8,25 +8,25 @@ class Vec2 {
 public:
     Vec2(float x_, float y_);
 
-    Vec2 operator+(const Vec2& v);
+    const Vec2 operator+(const Vec2& v) const;
 
-    Vec2 operator-(const Vec2& v);
+    const Vec2 operator-(const Vec2& v) const;
 
-    Vec2 operator*(const float scal);
+    const Vec2 operator*(const float scal) const;
 
-    friend Vec2 operator*(const float scal, Vec2 const& v);
+    friend const Vec2 operator*(const float scal, Vec2 const& v);
 
-    friend std::ostream& operator<<(std::ostream& out, Vec2 const& v);
+    friend const std::ostream& operator<<(std::ostream& out, Vec2 const& v);
 
-    float dotProduct(const Vec2& v);
+    const float dotProduct(const Vec2& v) const;
 
-    float squaredLength();
+    const float squaredLength() const;
 
-    float length();
+    const float length() const;
 
-    float& getX();
+    const float& getX() const;
 
-    float& getY();
+    const float& getY() const;
 
 
 private:
