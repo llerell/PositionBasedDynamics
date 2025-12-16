@@ -25,13 +25,19 @@ public:
 
     float getMass();
 
+    float getRad();
+
+
 private:
     Vec2 pos;
+
     Vec2 expPos;
+
     Vec2 velocity;
+
     float rad;
+
     float mass;
-    
 };
 
 #endif // PARTICLE_H
