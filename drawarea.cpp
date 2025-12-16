@@ -55,8 +55,8 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
 // Then calls the paintEvent method (with update)
 void DrawArea::mouseDoubleClickEvent(QMouseEvent *event) {
     QPointF position = event->position();
-    Vec2 pixelPos = Vec2(position.x(), position.y());
-    Vec2 worldPos = viewToWorld(pixelPos);
+    Vec2 viewPos = Vec2(position.x(), position.y());
+    Vec2 worldPos = viewToWorld(viewPos);
     Particle particle = Particle(worldPos, Vec2(0,5), 1, 1);
     context.addParticle(particle);
     this->update();
