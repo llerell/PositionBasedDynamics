@@ -1,5 +1,6 @@
 #include "drawarea.h"
 #include <QOpenGLWidget>
+#include <QLine>
 
 DrawArea::DrawArea(QWidget *parent)
     : QOpenGLWidget{parent}
@@ -30,6 +31,7 @@ Vec2 DrawArea::worldToView(Vec2 world_pos){
 Vec2 DrawArea::viewToWorld(Vec2 view_pos){
     return Vec2 {view_pos.getX(), this->height()-view_pos.getY()};
 }
+
 // Affichage des éléments de la sphère
 void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
     this->paintGL();    // I don't know how to clear out of paintGL()
@@ -40,6 +42,14 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
     Vec2 pixelPos = {0,0};
     width = this->width();
     height = this->height();
+    for(int i=0; i<context.getColliders().size(); i++) {
+        PlanCollider coll = context.getColliders()[i];
+        Vec2 pc = worldToView(coll.getCenter());
+        Vec2 p1 = Vec2(0,pc.getY());
+        Vec2 p2 = Vec2(width, pc.getY());
+        QLine line(p1.getX(), p1.getY(),p2.getX(), p2.getY());
+        painter->drawLine(line);
+    }
     for(int i=0; i<context.getNbParticles(); i++) {
         Particle part = particles[i];
         pixelPos=worldToView(part.getPos());
@@ -53,7 +63,7 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
 void DrawArea::mouseDoubleClickEvent(QMouseEvent *event) {
     Vec2 pixelPos = Vec2(event->x(), event->y());
     Vec2 worldPos = worldToView(pixelPos);
-    Particle particle = Particle(worldPos, Vec2(0,0), 0, 10);
+    Particle particle = Particle(worldPos, Vec2(20,50), 10, 1);
     context.addParticle(particle);
     this->update();
 }
@@ -63,14 +73,4 @@ void DrawArea::animate() {
     context.updatePhysicalSystem(1);
     this->update();
 }
-
-
-void worldToView(Vec2& world_pos) {
-    // How?
-}
-
-void viewToWorld(Vec2& view_pos) {
-    // How?
-}
-
 

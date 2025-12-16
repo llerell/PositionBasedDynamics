@@ -29,6 +29,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         context.h context.cpp
         particle.h particle.cpp
         vec2.h vec2.cpp
+        StaticConstraint.h
+        collider.h collider.cpp
+        plancollider.h plancollider.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET CProject APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
