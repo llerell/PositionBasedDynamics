@@ -1,13 +1,17 @@
 #include "context.h"
 #include "plancollider.h"
+#include "spherecollider.h"
 
 Context::Context() {
     this->particles = std::vector<Particle>();
-    this->colliders = std::vector<PlanCollider>();
+    this->colliders = std::vector<std::variant<PlanCollider,SphereCollider>>();
+    //this->colliders = std::vector<PlanCollider>();
     this->staticConstraints = std::vector<StaticConstraint>();
-    // PlanCollider for tests
-    PlanCollider planCollider = PlanCollider(Vec2(0,10), Vec2(1,0));
+    // Colliders for tests
+    PlanCollider planCollider = PlanCollider(Vec2(7,1), Vec2(0.5,10));
     this->colliders.push_back(planCollider);
+    SphereCollider sphereCollider = SphereCollider(Vec2(2,3), 2.0);
+    this->colliders.push_back(sphereCollider);
 }
 
 void Context::addParticle(Particle particle) {
@@ -22,9 +26,13 @@ std::vector<Particle>& Context::getParticles() {
     return particles;
 }
 
-std::vector<PlanCollider>& Context::getColliders() {
+std::vector<std::variant<PlanCollider,SphereCollider>>& Context::getColliders() {
     return colliders;
 }
+
+//std::vector<PlanCollider>& Context::getColliders() {
+//    return colliders;
+//}
 
 std::vector<StaticConstraint>& Context::getStaticConstraints() {
     return staticConstraints;
@@ -73,8 +81,7 @@ void Context::addStaticContactConstraints(float dt) {
     for(int i=0; i<colliders.size(); i++) {
         for(int j=0; j<particles.size(); j++) {
 
-
-            //this->staticConstraints.push_back(colliders[i].checkContact(particles[j]));
+            //std::optional<StaticConstraint> sc = colliders[i].checkContact(particles[j]);
         }
     }
 }

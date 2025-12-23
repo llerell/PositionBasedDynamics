@@ -18,3 +18,7 @@ std::optional<StaticConstraint> PlanCollider::checkContact(const Particle& colli
 Vec2 PlanCollider::getCenter() {
     return pc;
 }
+
+Vec2 PlanCollider::getNormal() {
+    return nc;
+}
