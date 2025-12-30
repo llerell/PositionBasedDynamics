@@ -112,7 +112,8 @@ void Context::addDynamicContactConstraints(float dt) {
 void Context::projectConstraints() {
     std::vector<StaticConstraint>& staticConstraints = getStaticConstraints();
     for (int i=0; i<staticConstraints.size(); i++){
-        staticConstraints[i].part_ptr->setExpPos(solve(staticConstraints[i]));
+        Particle* part = staticConstraints[i].part_ptr;
+        part->setExpPos(part->getExpPos()+solve(staticConstraints[i]));
     }
 }
 
