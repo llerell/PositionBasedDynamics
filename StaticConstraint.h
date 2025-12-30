@@ -10,9 +10,9 @@ struct StaticConstraint
     // Maybe also the particle and the collider that are in contact too
     Vec2 pc;
     Vec2 nc;
-    const Particle* part_ptr;
-
+    Particle* part_ptr;
 };
+
 
 
 #endif // STATICCONSTRAINT_H

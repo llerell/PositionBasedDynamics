@@ -14,6 +14,15 @@ Context::Context() {
     this->colliders.push_back(sphereCollider);
 }
 
+Vec2 solve(StaticConstraint sc)
+{
+
+    Vec2 qc = sc.part_ptr->getExpPos() + (-1) * sc.nc*sc.nc.dotProduct(sc.part_ptr->getExpPos()+(-1)*sc.pc);
+    Vec2 diff = sc.part_ptr->getExpPos() + (-1) * qc;
+    float C = diff.dotProduct(sc.nc) - sc.part_ptr->getRad();
+    return -C * sc.nc;
+}
+
 void Context::addParticle(Particle particle) {
     this->particles.push_back(particle);
 }
@@ -43,6 +52,7 @@ void Context::updatePhysicalSystem(float dt) {
     applyExternalForce(dt);
     updateExpectedPosition(dt);
     addStaticContactConstraints(dt);
+    projectConstraints();
     updateVelocityAndPosition(dt);
 }
 
@@ -81,17 +91,16 @@ void Context::addStaticContactConstraints(float dt) {
     staticConstraints.clear();
     for(int i=0; i<colliders.size(); i++) {
         for(int j=0; j<particles.size(); j++) {
-            std::optional<StaticConstraint>* p_sc;
+            //std::optional<StaticConstraint>* p_sc = nullptr;
 
-            std::variant<PlanCollider, SphereCollider> coll_var = colliders[i];
-            std::visit([j, p_sc, this](auto& arg) {*p_sc=arg.checkContact(this->particles[j]);}, coll_var);
-            //if (p_sc->has_value()){
-                //StaticConstraint sc = p_sc->value();
-                //staticConstraints.push_back(sc);
-                //Vec2 d = delta(sc);
-                //particles[i].setPos(particles[i].getExpPos()+d);
-            //}
+            using colliderVariant = std::variant<PlanCollider, SphereCollider>;
+            colliderVariant coll_var = colliders[i];
 
+            auto sc = std::visit([j, this](auto arg)->std::optional<StaticConstraint>{return arg.checkContact(this->particles[j]);}, coll_var);
+            if (sc.has_value()){
+                StaticConstraint sc_val = sc.value();
+                staticConstraints.push_back(sc_val);
+            }
         }
     }
 }
@@ -101,7 +110,10 @@ void Context::addDynamicContactConstraints(float dt) {
 }
 
 void Context::projectConstraints() {
-
+    std::vector<StaticConstraint>& staticConstraints = getStaticConstraints();
+    for (int i=0; i<staticConstraints.size(); i++){
+        staticConstraints[i].part_ptr->setExpPos(solve(staticConstraints[i]));
+    }
 }
 
 void Context::applyFriction(float dt) {
@@ -112,13 +124,6 @@ void Context::deleteContactConstraints() {
 
 }
 
-Vec2 delta(StaticConstraint sc)
-{
 
-    Vec2 qc = sc.part_ptr->getExpPos() + (-1) * sc.nc*sc.nc.dotProduct(sc.part_ptr->getExpPos()+(-1)*sc.pc);
-    Vec2 diff = sc.part_ptr->getExpPos() + (-1) * qc;
-    float C = diff.dotProduct(sc.nc) - sc.part_ptr->getRad();
-    return -C * sc.nc;
-}
 
 

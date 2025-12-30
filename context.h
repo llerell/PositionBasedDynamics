@@ -42,5 +42,5 @@ private:
     void deleteContactConstraints();
 
 };
-
+Vec2 solve(StaticConstraint sc);
 #endif // CONTEXT_H

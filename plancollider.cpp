@@ -4,7 +4,7 @@ PlanCollider::PlanCollider(Vec2 pc_, Vec2 nc_)
     : Collider(), pc(pc_), nc(nc_) {}
 
 
-std::optional<StaticConstraint> PlanCollider::checkContact(const Particle& collider) {
+std::optional<StaticConstraint> PlanCollider::checkContact(Particle& collider) {
     Vec2 expPos = collider.getExpPos();
     Vec2 diff = expPos - this->pc;
     float ri = collider.getRad();
@@ -13,6 +13,7 @@ std::optional<StaticConstraint> PlanCollider::checkContact(const Particle& colli
         sc.pc = this->pc;
         sc.nc = this->nc;
         sc.part_ptr = &collider;
+        std::cout<<"contact"<<std::endl;
         return sc;
     }
     return {};
