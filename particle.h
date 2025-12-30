@@ -28,7 +28,6 @@ public:
     const float getRad() const;
 
 
-
 private:
     Vec2 pos;
 

@@ -1,8 +1,10 @@
 #ifndef CONTEXT_H
 #define CONTEXT_H
 #include "StaticConstraint.h"
-#include "plancollider.h"
+#include "collider.h"
 #include "particle.h"
+#include "plancollider.h"
+#include "spherecollider.h"
 #include <vector>
 
 class Context
@@ -16,7 +18,8 @@ public:
 
     std::vector<Particle>& getParticles();
 
-    std::vector<PlanCollider>& getColliders();
+    std::vector<std::variant<PlanCollider, SphereCollider>>& getColliders();
+    //std::vector<PlanCollider>& getColliders();
 
     std::vector<StaticConstraint>& getStaticConstraints();
 
@@ -24,7 +27,8 @@ public:
 
 private:
     std::vector<Particle> particles;
-    std::vector<PlanCollider> colliders;
+    std::vector<std::variant<PlanCollider,SphereCollider>> colliders;
+    //std::vector<PlanCollider> colliders;
     std::vector<StaticConstraint> staticConstraints;
 
     void applyExternalForce(float dt);

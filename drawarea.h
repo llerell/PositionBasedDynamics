@@ -6,6 +6,8 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include <QOpenGLFunctions>
+#include "plancollider.h"
+#include "spherecollider.h"
 #include "vec2.h"
 
 class DrawArea : public QOpenGLWidget
@@ -20,8 +22,10 @@ public:
 
     void paintGL() override;
 
-    // Affichage des éléments de la sphère
     void show(QPainter *painter, QPaintEvent *event, Context& context);
+
+    void drawCollider(QPainter *painter, PlanCollider plancollider);
+    void drawCollider(QPainter *painter, SphereCollider spherCollider);
 
     // Takes the mouse position when there is a double click
     // Then calls the paintEvent method (with update)
@@ -40,6 +44,8 @@ private:
     Context context;
 
     float m_height = 10;
+
+    float m_width = 15;
 
 signals:
 };
