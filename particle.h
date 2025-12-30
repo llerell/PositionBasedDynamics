@@ -27,7 +27,6 @@ public:
 
     const float getRad() const;
 
-    float getRad();
 
 
 private:
