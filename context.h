@@ -1,6 +1,7 @@
 #ifndef CONTEXT_H
 #define CONTEXT_H
 #include "StaticConstraint.h"
+#include "DynamicConstraint.h"
 #include "collider.h"
 #include "particle.h"
 #include "plancollider.h"
@@ -23,13 +24,18 @@ public:
 
     std::vector<StaticConstraint>& getStaticConstraints();
 
+    std::vector<DynamicConstraint>& getDynamicConstraints();
+
     void updatePhysicalSystem(float dt);
+
+    std::optional<DynamicConstraint> checkDynamicContact(Particle& part1, Particle& part2);
 
 private:
     std::vector<Particle> particles;
     std::vector<std::variant<PlanCollider,SphereCollider>> colliders;
     //std::vector<PlanCollider> colliders;
     std::vector<StaticConstraint> staticConstraints;
+    std::vector<DynamicConstraint> dynamicConstraints;
 
     void applyExternalForce(float dt);
     void updateVelocityAndPosition(float dt);
