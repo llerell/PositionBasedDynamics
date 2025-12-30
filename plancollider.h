@@ -14,6 +14,8 @@ public:
 
     Vec2 getCenter() override;
 
+    Vec2 getNormal();
+
 private:
     Vec2 pc;    // A point of the plan
     Vec2 nc;    // Normal vector

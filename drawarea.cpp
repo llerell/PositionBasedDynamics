@@ -1,11 +1,14 @@
 #include "drawarea.h"
+#include "spherecollider.h"
 #include <QOpenGLWidget>
 #include <QLine>
 
 DrawArea::DrawArea(QWidget *parent)
     : QOpenGLWidget{parent}
 {
-    this->setFixedSize(QSize(750,500));
+    float ratio = m_width/m_height;
+    int height = 500;
+    this->setFixedSize(QSize(height*ratio,height));
     context = Context();
 }
 
@@ -27,12 +30,12 @@ void DrawArea::paintGL() {
 // The height of the screen is equivalent to 10m.
 Vec2 DrawArea::worldToView(Vec2 world_pos){
     float py = (this->height())*(1-world_pos.getY()/m_height);
-    return Vec2 {this->height()*world_pos.getX()/m_height, py};
+    return Vec2 {this->width()*world_pos.getX()/m_width, py};
 }
 
 Vec2 DrawArea::viewToWorld(Vec2 view_pos){
     float y = m_height*(1-view_pos.getY()/(this->height()));
-    return Vec2 {m_height*view_pos.getX()/this->height(), y};
+    return Vec2 {m_width*view_pos.getX()/this->width(), y};
 }
 
 // Affichage des éléments de la sphère
@@ -41,17 +44,29 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
     int height = this->height();
     int width = this->width();
     painter->setPen(Qt::blue);
-    painter->setBrush(QBrush(Qt::red));
+    painter->setBrush(QBrush(Qt::blue));
     std::vector<Particle> particles = context.getParticles();
     for(int i=0; i<context.getColliders().size(); i++) {
-        PlanCollider coll = context.getColliders()[i];
-        Vec2 pc = worldToView(coll.getCenter());
-        Vec2 p1 = Vec2(0,pc.getY());
-        Vec2 p2 = Vec2(width, pc.getY());
-        QLine line(p1.getX(), p1.getY(),p2.getX(), p2.getY());
-        painter->drawLine(line);
+        //Collider& coll_ptr = context.getColliders()[i];
+
+        // Retourne un pointeur nul si ne peut pas faire le cast
+        //dynamic_cast<PlanCollider*>(&coll_ptr);
+        // Mais c'est pas une bonne pratique
+
+        // Autre solution (un peu mieux) : Faire une fonction dans Collider qui dessine elle-même (en mettant en argument les éléments dont il y a besoin)
+
+        // Autre solution : Utiliser
+        std::variant<PlanCollider, SphereCollider> coll_var = context.getColliders()[i];
+        std::visit([painter, this](auto& arg) {drawCollider(painter, arg);}, coll_var);
+        //C'est une lambda fonction
+        // C'est mieux mais peut-être qu'il y aura d'autres problèmes
+
+        // Ca marchait toujours pas avec un vecteur de Collider, il m'a fallut en faire un vecteur de std::variant
+        // Mais du coup je comprend pas à quoi sert l'héritage ici vu qu'on doit ignorer la classe abstraite...
+
     }
     
+    painter->setBrush(QBrush(Qt::red));
     Vec2 viewPos = Vec2(0,0);
     for(int i=0; i<context.getNbParticles(); i++) {
         Particle part = particles[i];
@@ -61,6 +76,24 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
         painter->drawEllipse(target);
 
     }
+}
+
+void DrawArea::drawCollider(QPainter *painter, PlanCollider planCollider) {
+    Vec2 pc = planCollider.getCenter();
+    Vec2 nc = planCollider.getNormal();
+    float coeff = -nc.getX()/nc.getY();
+    Vec2 p1 = worldToView(Vec2(0,pc.getY()-coeff*pc.getX()));
+    Vec2 p2 = worldToView(Vec2(m_width, pc.getY()+coeff*(m_width - pc.getX())));
+    QLine line(p1.getX(), p1.getY(),p2.getX(), p2.getY());
+    painter->drawLine(line);
+}
+
+void DrawArea::drawCollider(QPainter *painter, SphereCollider sphereCollider) {
+    Vec2 pc = worldToView(sphereCollider.getCenter());
+    // We also need to transform the radius with worldToView (or a similar function)
+    float rc = this->height() * sphereCollider.getRadius()/m_height;
+    QRectF target(pc.getX()-rc/2, pc.getY()-rc/2, rc, rc);
+    painter->drawEllipse(target);
 }
 
 // Takes the mouse position when there is a double click
