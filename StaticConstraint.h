@@ -4,10 +4,9 @@
 #include "vec2.h"
 #include "particle.h"
 
-// Constraint of type
+// linearised constraint of type (pi-pc)^T.nc - ri < 0
 struct StaticConstraint
 {
-    // Maybe also the particle and the collider that are in contact too
     Vec2 pc;
     Vec2 nc;
     Particle* part_ptr;

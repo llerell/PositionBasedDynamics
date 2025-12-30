@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     draw_area = new DrawArea();
 
-    nb_milliseconds = 50;
+    nb_milliseconds = 5;
 
     QVBoxLayout *layout = new QVBoxLayout(ui->centralwidget); // constructor’s parameter is the widget that will use the layout
 

@@ -2,7 +2,7 @@
 #define SPHERECOLLIDER_H
 
 #include "collider.h"
-#include <stdio.h>
+#include "vec2.h"
 
 class SphereCollider : public Collider
 {

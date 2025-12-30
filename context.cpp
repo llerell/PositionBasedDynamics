@@ -1,26 +1,37 @@
 #include "context.h"
 #include "plancollider.h"
 #include "spherecollider.h"
+#include <iostream>
+
 
 Context::Context() {
     this->particles = std::vector<Particle>();
     this->colliders = std::vector<std::variant<PlanCollider,SphereCollider>>();
     //this->colliders = std::vector<PlanCollider>();
     this->staticConstraints = std::vector<StaticConstraint>();
-    // Colliders for tests
-    PlanCollider planCollider = PlanCollider(Vec2(7,1), Vec2(0.5,10));
-    this->colliders.push_back(planCollider);
-    SphereCollider sphereCollider = SphereCollider(Vec2(2,3), 2.0);
-    this->colliders.push_back(sphereCollider);
+
+    // Colliders
+    PlanCollider groundCollider = PlanCollider(Vec2(0.0,1.0), Vec2(0.0,1.0));
+    //PlanCollider leftWall = PlanCollider(Vec2(0,0), Vec2(1,0.01));
+    //PlanCollider rightWall = PlanCollider(Vec2(15,0), Vec2(-1, -0.01));
+    this->colliders.push_back(groundCollider);
+    //this->colliders.push_back(leftWall);
+    //this->colliders.push_back(rightWall);
+
+    SphereCollider sphereCollider2 = SphereCollider(Vec2(0,0), 1.0);
+    SphereCollider sphereCollider1 = SphereCollider(Vec2(2,3), 2.0);
+    this->colliders.push_back(sphereCollider1);
+    this->colliders.push_back(sphereCollider2);
 }
 
 Vec2 solve(StaticConstraint sc)
 {
 
-    Vec2 qc = sc.part_ptr->getExpPos() + (-1) * sc.nc*sc.nc.dotProduct(sc.part_ptr->getExpPos()+(-1)*sc.pc);
-    Vec2 diff = sc.part_ptr->getExpPos() + (-1) * qc;
+    Vec2 qc = sc.part_ptr->getExpPos() - (((sc.part_ptr->getExpPos() - sc.pc).dotProduct(sc.nc))*sc.nc);
+    Vec2 diff = sc.part_ptr->getExpPos() - qc;
     float C = diff.dotProduct(sc.nc) - sc.part_ptr->getRad();
-    return -C * sc.nc;
+    Vec2 delta = - C * sc.nc;
+    return delta;
 }
 
 void Context::addParticle(Particle particle) {
@@ -39,10 +50,6 @@ std::vector<std::variant<PlanCollider,SphereCollider>>& Context::getColliders() 
     return colliders;
 }
 
-//std::vector<PlanCollider>& Context::getColliders() {
-//    return colliders;
-//}
-
 std::vector<StaticConstraint>& Context::getStaticConstraints() {
     return staticConstraints;
 }
@@ -51,7 +58,7 @@ std::vector<StaticConstraint>& Context::getStaticConstraints() {
 void Context::updatePhysicalSystem(float dt) {
     applyExternalForce(dt);
     updateExpectedPosition(dt);
-    addStaticContactConstraints(dt);
+    addStaticContactConstraints();
     projectConstraints();
     updateVelocityAndPosition(dt);
 }
@@ -87,16 +94,16 @@ void Context::dampVelocities(float dt) {
 
 }
 
-void Context::addStaticContactConstraints(float dt) {
+void Context::addStaticContactConstraints() {
     staticConstraints.clear();
     for(int i=0; i<colliders.size(); i++) {
         for(int j=0; j<particles.size(); j++) {
-            //std::optional<StaticConstraint>* p_sc = nullptr;
 
+            // variants and visitors as an alternative to inheritance
             using colliderVariant = std::variant<PlanCollider, SphereCollider>;
             colliderVariant coll_var = colliders[i];
-
             auto sc = std::visit([j, this](auto arg)->std::optional<StaticConstraint>{return arg.checkContact(this->particles[j]);}, coll_var);
+
             if (sc.has_value()){
                 StaticConstraint sc_val = sc.value();
                 staticConstraints.push_back(sc_val);

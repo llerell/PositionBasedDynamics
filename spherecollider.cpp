@@ -8,10 +8,9 @@ std::optional<StaticConstraint> SphereCollider::checkContact(Particle& collider)
     float sdf = diff.length() - collider.getRad() - this->getRadius();
     if (sdf<0){
         StaticConstraint sc;
-        sc.nc = (1/diff.length())*diff;
+        sc.nc = (1.0/diff.length())*diff;
         sc.pc = collider.getExpPos() - sdf * sc.nc;
         sc.part_ptr = &collider;
-        std::cout << "contact" << std::endl;
         return sc;
     }
     return {};

@@ -1,19 +1,19 @@
 #include "plancollider.h"
 
 PlanCollider::PlanCollider(Vec2 pc_, Vec2 nc_)
-    : Collider(), pc(pc_), nc(nc_) {}
+    : Collider(), pc(pc_), nc((1.0/nc_.length())*nc_) {}
 
 
 std::optional<StaticConstraint> PlanCollider::checkContact(Particle& collider) {
     Vec2 expPos = collider.getExpPos();
-    Vec2 diff = expPos - this->pc;
+    Vec2 diff = expPos - getCenter();
     float ri = collider.getRad();
-    if(diff.dotProduct(this->nc) - ri <0) {
+    std::cout << (diff.dotProduct(getNormal()) - ri) << std::endl;
+    if(diff.dotProduct(getNormal()) - ri < 0.0) {
         StaticConstraint sc;
-        sc.pc = this->pc;
-        sc.nc = this->nc;
+        sc.pc = getCenter();
+        sc.nc = getNormal();
         sc.part_ptr = &collider;
-        std::cout<<"contact"<<std::endl;
         return sc;
     }
     return {};
