@@ -78,10 +78,20 @@ void Context::dampVelocities(float dt) {
 }
 
 void Context::addStaticContactConstraints(float dt) {
+    staticConstraints.clear();
     for(int i=0; i<colliders.size(); i++) {
         for(int j=0; j<particles.size(); j++) {
+            std::optional<StaticConstraint>* p_sc;
 
-            //std::optional<StaticConstraint> sc = colliders[i].checkContact(particles[j]);
+            std::variant<PlanCollider, SphereCollider> coll_var = colliders[i];
+            std::visit([j, p_sc, this](auto& arg) {*p_sc=arg.checkContact(this->particles[j]);}, coll_var);
+            //if (p_sc->has_value()){
+                //StaticConstraint sc = p_sc->value();
+                //staticConstraints.push_back(sc);
+                //Vec2 d = delta(sc);
+                //particles[i].setPos(particles[i].getExpPos()+d);
+            //}
+
         }
     }
 }
@@ -101,4 +111,14 @@ void Context::applyFriction(float dt) {
 void Context::deleteContactConstraints() {
 
 }
+
+Vec2 delta(StaticConstraint sc)
+{
+
+    Vec2 qc = sc.part_ptr->getExpPos() + (-1) * sc.nc*sc.nc.dotProduct(sc.part_ptr->getExpPos()+(-1)*sc.pc);
+    Vec2 diff = sc.part_ptr->getExpPos() + (-1) * qc;
+    float C = diff.dotProduct(sc.nc) - sc.part_ptr->getRad();
+    return -C * sc.nc;
+}
+
 

@@ -5,14 +5,17 @@ PlanCollider::PlanCollider(Vec2 pc_, Vec2 nc_)
 
 
 std::optional<StaticConstraint> PlanCollider::checkContact(const Particle& collider) {
-    std::optional<StaticConstraint> sc;
     Vec2 expPos = collider.getExpPos();
     Vec2 diff = expPos - this->pc;
     float ri = collider.getRad();
     if(diff.dotProduct(this->nc) - ri <0) {
-        sc = StaticConstraint({diff.dotProduct(this->nc),ri});
+        StaticConstraint sc;
+        sc.pc = this->pc;
+        sc.nc = this->nc;
+        sc.part_ptr = &collider;
+        return sc;
     }
-    return sc;
+    return {};
 }
 
 Vec2 PlanCollider::getCenter() {

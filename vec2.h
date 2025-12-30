@@ -7,6 +7,7 @@
 class Vec2 {
 public:
     Vec2(float x_, float y_);
+    Vec2();
 
     const Vec2 operator+(const Vec2& v) const;
 

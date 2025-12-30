@@ -3,6 +3,8 @@
 Vec2::Vec2(float x_, float y_)
     : x(x_), y(y_) {}
 
+Vec2::Vec2(): x(0), y(0){}
+
 const Vec2 Vec2::operator +(const Vec2& v) const {
     return Vec2(this->x + v.x, this->y + v.y);
 }

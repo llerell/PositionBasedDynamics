@@ -1,14 +1,18 @@
 #ifndef STATICCONSTRAINT_H
 #define STATICCONSTRAINT_H
 
-// Constraint of type a<b
+#include "vec2.h"
+#include "particle.h"
+
+// Constraint of type
 struct StaticConstraint
 {
-    float a;
-    float b;
-    // Maybe also the particule and the collider that are in contact too
-};
+    // Maybe also the particle and the collider that are in contact too
+    Vec2 pc;
+    Vec2 nc;
+    const Particle* part_ptr;
 
+};
 
 
 #endif // STATICCONSTRAINT_H
