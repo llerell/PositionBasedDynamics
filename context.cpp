@@ -11,8 +11,8 @@ Context::Context() {
 
     // Colliders
     PlanCollider groundCollider = PlanCollider(Vec2(0.0,1.0), Vec2(0.0,1.0));
-    PlanCollider leftWall = PlanCollider(Vec2(0,0), Vec2(1,0.01));
-    PlanCollider rightWall = PlanCollider(Vec2(15,0), Vec2(-1, -0.01));
+    PlanCollider leftWall = PlanCollider(Vec2(0,0), Vec2(1,0));
+    PlanCollider rightWall = PlanCollider(Vec2(15,0), Vec2(-1, 0));
     this->colliders.push_back(groundCollider);
     this->colliders.push_back(leftWall);
     this->colliders.push_back(rightWall);

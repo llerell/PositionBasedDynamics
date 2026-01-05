@@ -83,11 +83,16 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
 void DrawArea::drawCollider(QPainter *painter, PlanCollider planCollider) {
     Vec2 pc = planCollider.getCenter();
     Vec2 nc = planCollider.getNormal();
-    float coeff = -nc.getX()/nc.getY();
-    //TODO : vertical planes
-    Vec2 p1 = worldToView(Vec2(0,pc.getY()-coeff*pc.getX()));
-    Vec2 p2 = worldToView(Vec2(m_width, pc.getY()+coeff*(m_width - pc.getX())));
+    Vec2 p1, p2;
 
+    if (nc.getY()!=0){
+        float coeff = -nc.getX()/nc.getY();
+        p1 = worldToView(Vec2(0,pc.getY()-coeff*pc.getX()));
+        p2 = worldToView(Vec2(m_width, pc.getY()+coeff*(m_width - pc.getX())));
+    } else { // vertical planes
+        p1 = worldToView(Vec2(pc.getX(), 0));
+        p2 = worldToView(Vec2(pc.getX(), m_height));
+    }
     QLine line(p1.getX(), p1.getY(),p2.getX(), p2.getY());
     painter->drawLine(line);
 }
