@@ -74,7 +74,7 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
         viewPos=worldToView(part.getPos());
         float rad = height*part.getRad()/m_height;
 
-        QRectF target(viewPos.getX()-rad/2, viewPos.getY()-rad/2, rad, rad);
+        QRectF target(viewPos.getX()-rad, viewPos.getY()-rad, rad*2, rad*2);
         painter->drawEllipse(target);
 
     }
@@ -84,6 +84,7 @@ void DrawArea::drawCollider(QPainter *painter, PlanCollider planCollider) {
     Vec2 pc = planCollider.getCenter();
     Vec2 nc = planCollider.getNormal();
     float coeff = -nc.getX()/nc.getY();
+    //TODO : vertical planes
     Vec2 p1 = worldToView(Vec2(0,pc.getY()-coeff*pc.getX()));
     Vec2 p2 = worldToView(Vec2(m_width, pc.getY()+coeff*(m_width - pc.getX())));
 
@@ -95,7 +96,7 @@ void DrawArea::drawCollider(QPainter *painter, SphereCollider sphereCollider) {
     Vec2 pc = worldToView(sphereCollider.getCenter());
     // We also need to transform the radius with worldToView (or a similar function)
     float rc = this->height() * sphereCollider.getRadius()/m_height;
-    QRectF target(pc.getX()-rc/2, pc.getY()-rc/2, rc, rc);
+    QRectF target(pc.getX()-rc, pc.getY()-rc, 2*rc, 2*rc);
     painter->drawEllipse(target);
 }
 
@@ -112,7 +113,7 @@ void DrawArea::mouseDoubleClickEvent(QMouseEvent *event) {
 
 // Redraw another ellipse below the precedent
 void DrawArea::animate() {
-    context.updatePhysicalSystem(0.05);
+    context.updatePhysicalSystem(0.01);
     this->update();
 }
 

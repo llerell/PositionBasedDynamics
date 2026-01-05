@@ -22,9 +22,11 @@ const Vec2 operator*(const float scal, Vec2 const& v) {
     return u;
 }
 
-const std::ostream& operator<<(std::ostream& out, Vec2 const& v) {
-    return out << v.x << ", " << v.y;
+std::ostream& operator<<(std::ostream& out, Vec2 const& v) {
+    return out << (double) v.x << ", " << (double) v.y;
 }
+
+
 
 const float Vec2::dotProduct(const Vec2& v) const {
     return this->x * v.x + this->y * v.y;

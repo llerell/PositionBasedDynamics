@@ -7,21 +7,18 @@
 Context::Context() {
     this->particles = std::vector<Particle>();
     this->colliders = std::vector<std::variant<PlanCollider,SphereCollider>>();
-    //this->colliders = std::vector<PlanCollider>();
     this->staticConstraints = std::vector<StaticConstraint>();
 
     // Colliders
     PlanCollider groundCollider = PlanCollider(Vec2(0.0,1.0), Vec2(0.0,1.0));
-    //PlanCollider leftWall = PlanCollider(Vec2(0,0), Vec2(1,0.01));
-    //PlanCollider rightWall = PlanCollider(Vec2(15,0), Vec2(-1, -0.01));
+    PlanCollider leftWall = PlanCollider(Vec2(0,0), Vec2(1,0.01));
+    PlanCollider rightWall = PlanCollider(Vec2(15,0), Vec2(-1, -0.01));
     this->colliders.push_back(groundCollider);
-    //this->colliders.push_back(leftWall);
-    //this->colliders.push_back(rightWall);
+    this->colliders.push_back(leftWall);
+    this->colliders.push_back(rightWall);
 
-    SphereCollider sphereCollider2 = SphereCollider(Vec2(0,0), 1.0);
-    SphereCollider sphereCollider1 = SphereCollider(Vec2(2,3), 2.0);
-    this->colliders.push_back(sphereCollider1);
-    this->colliders.push_back(sphereCollider2);
+    SphereCollider sphereCollider = SphereCollider(Vec2(2,3), 1.0);
+    this->colliders.push_back(sphereCollider);
 }
 
 Vec2 solve(StaticConstraint sc)
@@ -62,7 +59,6 @@ void Context::updatePhysicalSystem(float dt) {
     projectConstraints();
     updateVelocityAndPosition(dt);
 }
-
 
 void Context::applyExternalForce(float dt) {
     // Gravity
