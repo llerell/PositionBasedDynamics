@@ -1,7 +1,7 @@
 #include "particle.h"
 
-Particle::Particle(Vec2 pos_, Vec2 vel, float rad_, float mass_)
-    : pos(pos_), velocity(vel), rad(rad_), mass(mass_), expPos(pos_) {}
+Particle::Particle(Vec2 pos_, Vec2 vel, float rad_, float mass_, QColor color_)
+    : pos(pos_), velocity(vel), rad(rad_), mass(mass_), expPos(pos_), color(color_) {}
 
 Particle::Particle(): pos(Vec2{0,0}), velocity(Vec2{0,0}), mass(0.0), expPos(Vec2{0,0}) {}
 
@@ -45,3 +45,6 @@ const float Particle::getRad() const {
     return rad;
 }
 
+const QColor Particle::getColor() const {
+    return color;
+}

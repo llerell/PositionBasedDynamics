@@ -20,18 +20,13 @@ public:
 
     void initializeGL() override;
 
-    void paintGL() override;
-
     void show(QPainter *painter, QPaintEvent *event, Context& context);
 
     void drawCollider(QPainter *painter, PlanCollider plancollider);
     void drawCollider(QPainter *painter, SphereCollider spherCollider);
 
-    // Takes the mouse position when there is a double click
-    // Then calls the paintEvent method (with update)
     void mouseDoubleClickEvent(QMouseEvent *event) override;
 
-    // Redraw another ellipse below the precedent
     void animate();
 
 
@@ -46,6 +41,9 @@ private:
     float m_height = 10;
 
     float m_width = 15;
+
+    QColor colliderColor = Qt::black;
+    std::vector<QColor> partColors = {Qt::darkRed, Qt::darkGreen, Qt::darkBlue, QColor(230,200,0), Qt::gray, QColor(0,114,114), QColor(200,120,0), QColor(120,0,200)};
 
 signals:
 };

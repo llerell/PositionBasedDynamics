@@ -1,11 +1,12 @@
 #ifndef PARTICLE_H
 #define PARTICLE_H
 #include "vec2.h"
+#include <qcolor.h>
 
 class Particle
 {
 public:
-    Particle(Vec2 pos, Vec2 velocity, float rad, float mass);
+    Particle(Vec2 pos, Vec2 velocity, float rad, float mass, QColor color_);
 
     Particle();
 
@@ -29,6 +30,8 @@ public:
 
     const float getRad() const;
 
+    const QColor getColor() const;
+
 
 private:
     Vec2 pos;
@@ -40,6 +43,8 @@ private:
     float rad;
 
     float mass;
+
+    QColor color;
 };
 
 #endif // PARTICLE_H
