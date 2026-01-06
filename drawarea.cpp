@@ -70,6 +70,7 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
     Vec2 viewPos;
     for(int i=0; i<context.getNbParticles(); i++) {
         Particle part = particles[i];
+
         // translate in view coordinates
         viewPos=worldToView(part.getPos());
         float rad = height*part.getRad()/m_height;
@@ -93,6 +94,7 @@ void DrawArea::drawCollider(QPainter *painter, PlanCollider planCollider) {
         p1 = worldToView(Vec2(pc.getX(), 0));
         p2 = worldToView(Vec2(pc.getX(), m_height));
     }
+
     QLine line(p1.getX(), p1.getY(),p2.getX(), p2.getY());
     painter->drawLine(line);
 }

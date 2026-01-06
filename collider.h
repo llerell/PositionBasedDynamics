@@ -16,7 +16,7 @@ public:
 
     virtual auto checkContact(Particle& collider)-> std::optional<StaticConstraint> =0;
 
-    virtual Vec2 getCenter() =0;
+    virtual Vec2 getCenter() = 0;
 
 private:
 };

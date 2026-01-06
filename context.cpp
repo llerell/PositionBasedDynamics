@@ -1,7 +1,6 @@
 #include "context.h"
 #include "plancollider.h"
 #include "spherecollider.h"
-#include <iostream>
 
 
 Context::Context() {
@@ -55,15 +54,20 @@ std::vector<StaticConstraint>& Context::getStaticConstraints() {
 void Context::updatePhysicalSystem(float dt) {
     applyExternalForce(dt);
     updateExpectedPosition(dt);
+
     addStaticContactConstraints();
     projectConstraints();
+
     updateVelocityAndPosition(dt);
+    deleteContactConstraints();
 }
 
 void Context::applyExternalForce(float dt) {
+
     // Gravity
     float m;
     float g = 9.81;
+
     for(int i=0; i<particles.size(); i++) {
         m = particles[i].getMass();
         const Vec2 Fg = Vec2(0,-m*g);
@@ -91,7 +95,7 @@ void Context::dampVelocities(float dt) {
 }
 
 void Context::addStaticContactConstraints() {
-    staticConstraints.clear();
+
     for(int i=0; i<colliders.size(); i++) {
         for(int j=0; j<particles.size(); j++) {
 
@@ -113,6 +117,7 @@ void Context::addDynamicContactConstraints(float dt) {
 }
 
 void Context::projectConstraints() {
+
     std::vector<StaticConstraint>& staticConstraints = getStaticConstraints();
     for (int i=0; i<staticConstraints.size(); i++){
         Particle* part = staticConstraints[i].part_ptr;
@@ -125,7 +130,7 @@ void Context::applyFriction(float dt) {
 }
 
 void Context::deleteContactConstraints() {
-
+    staticConstraints.clear();
 }
 
 
