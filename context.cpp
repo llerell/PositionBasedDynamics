@@ -72,6 +72,7 @@ std::optional<DynamicConstraint> Context::checkDynamicContact(Particle& part1, P
 // Update the positions of the particles
 void Context::updatePhysicalSystem(float dt) {
     applyExternalForce(dt);
+    applyFriction(dt);
     updateExpectedPosition(dt);
 
     addStaticContactConstraints();
@@ -159,7 +160,18 @@ void Context::projectConstraints() {
 }
 
 void Context::applyFriction(float dt) {
+    // fluid friction
+    float Cx = 0.5; // constant for a sphere
+    float rho = 1.3;
 
+    for (int i=0; i<particles.size(); i++){
+        Vec2 v = particles[i].getVelocity();
+        float r = particles[i].getRad();
+        float S = M_PI * r * r;
+
+        Vec2 F = -(1.0/2.0)*Cx*rho*S*v.length()*v;
+        particles[i].setVelocity(v + F * (dt/particles[i].getMass()));
+    }
 }
 
 void Context::deleteContactConstraints() {
