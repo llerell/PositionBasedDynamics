@@ -7,6 +7,7 @@ Context::Context() {
     this->particles = std::vector<Particle>();
     this->colliders = std::vector<std::variant<PlanCollider,SphereCollider>>();
     this->staticConstraints = std::vector<StaticConstraint>();
+    this->dynamicConstraints = std::vector<DynamicConstraint>();
 
     // Colliders
     PlanCollider groundCollider = PlanCollider(Vec2(0.0,1.0), Vec2(0.0,1.0));
@@ -15,7 +16,7 @@ Context::Context() {
     this->colliders.push_back(groundCollider);
     this->colliders.push_back(leftWall);
     this->colliders.push_back(rightWall);
-
+  
     SphereCollider sphereCollider = SphereCollider(Vec2(2,3), 1.0);
     this->colliders.push_back(sphereCollider);
 }
@@ -50,12 +51,31 @@ std::vector<StaticConstraint>& Context::getStaticConstraints() {
     return staticConstraints;
 }
 
+std::vector<DynamicConstraint>& Context::getDynamicConstraints() {
+    return dynamicConstraints;
+}
+
+std::optional<DynamicConstraint> Context::checkDynamicContact(Particle& part1, Particle& part2) {
+    Vec2 p1 = part1.getExpPos();
+    Vec2 p2 = part2.getExpPos();
+    float r1 = part1.getRad();
+    float r2 = part2.getRad();
+    float d = (p1-p2).length();
+    if((r1+r2)-d>0) {
+        return DynamicConstraint {&part1, &part2};
+    }
+    else {
+        return {};
+    }
+}
+
 // Update the positions of the particles
 void Context::updatePhysicalSystem(float dt) {
     applyExternalForce(dt);
     updateExpectedPosition(dt);
 
     addStaticContactConstraints();
+    addDynamicContactConstraints(dt);
     projectConstraints();
 
     updateVelocityAndPosition(dt);
@@ -113,15 +133,28 @@ void Context::addStaticContactConstraints() {
 }
 
 void Context::addDynamicContactConstraints(float dt) {
-
+    dynamicConstraints.clear();
+    for(int i=0; i<particles.size(); i++) {
+        for(int j=i+1; j<particles.size(); j++) {
+            std::optional<DynamicConstraint> dc = checkDynamicContact(particles[i], particles[j]);
+            if(dc.has_value()) {
+                dynamicConstraints.push_back(dc.value());
+            }
+        }
+    }
 }
 
 void Context::projectConstraints() {
-
+    // Static constraints
     std::vector<StaticConstraint>& staticConstraints = getStaticConstraints();
     for (int i=0; i<staticConstraints.size(); i++){
         Particle* part = staticConstraints[i].part_ptr;
         part->setExpPos(part->getExpPos()+solve(staticConstraints[i]));
+    }
+  
+    // Dynamic constraints
+    for(int i=0; i<dynamicConstraints.size(); i++) {
+        dynamicConstraints[i].enforceDynamicConstraint();
     }
 }
 

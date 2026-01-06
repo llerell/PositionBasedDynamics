@@ -44,3 +44,4 @@ const float Particle::getMass() {
 const float Particle::getRad() const {
     return rad;
 }
+
