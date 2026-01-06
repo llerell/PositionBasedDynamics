@@ -2,6 +2,7 @@
 #define PLANCOLLIDER_H
 
 #include "collider.h"
+#include "vec2.h"
 
 class PlanCollider : public Collider
 {
@@ -10,14 +11,14 @@ public:
 
     ~PlanCollider() override {}
 
-    std::optional<StaticConstraint> checkContact(const Particle& collider) override;
+    std::optional<StaticConstraint> checkContact(Particle& collider) override;
 
     Vec2 getCenter() override;
 
     Vec2 getNormal();
 
 private:
-    Vec2 pc;    // A point of the plan
+    Vec2 pc;    // A point of the plane
     Vec2 nc;    // Normal vector
 };
 

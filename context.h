@@ -7,6 +7,7 @@
 #include "plancollider.h"
 #include "spherecollider.h"
 #include <vector>
+#include "vec2.h"
 
 class Context
 {
@@ -42,11 +43,11 @@ private:
     void updateExpectedPosition(float dt);
     void dampVelocities(float dt);
     void addDynamicContactConstraints(float dt);
-    void addStaticContactConstraints(float dt);
+    void addStaticContactConstraints();
     void projectConstraints();
     void applyFriction(float dt);
     void deleteContactConstraints();
 
 };
-
+Vec2 solve(StaticConstraint sc);
 #endif // CONTEXT_H

@@ -7,6 +7,7 @@
 class Vec2 {
 public:
     Vec2(float x_, float y_);
+    Vec2();
 
     const Vec2 operator+(const Vec2& v) const;
 
@@ -16,7 +17,7 @@ public:
 
     friend const Vec2 operator*(const float scal, Vec2 const& v);
 
-    friend const std::ostream& operator<<(std::ostream& out, Vec2 const& v);
+    friend std::ostream& operator<<(std::ostream& out, Vec2 const& v);
 
     const float dotProduct(const Vec2& v) const;
 

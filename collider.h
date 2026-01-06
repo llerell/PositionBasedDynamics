@@ -14,9 +14,9 @@ public:
 
     virtual ~Collider() {}
 
-    virtual auto checkContact(const Particle& collider)-> std::optional<StaticConstraint> =0;
+    virtual auto checkContact(Particle& collider)-> std::optional<StaticConstraint> =0;
 
-    virtual Vec2 getCenter() =0;
+    virtual Vec2 getCenter() = 0;
 
 private:
 };

@@ -2,17 +2,33 @@
 #include "plancollider.h"
 #include "spherecollider.h"
 
+
 Context::Context() {
     this->particles = std::vector<Particle>();
     this->colliders = std::vector<std::variant<PlanCollider,SphereCollider>>();
-    //this->colliders = std::vector<PlanCollider>();
     this->staticConstraints = std::vector<StaticConstraint>();
     this->dynamicConstraints = std::vector<DynamicConstraint>();
-    // Colliders for tests
-    PlanCollider planCollider = PlanCollider(Vec2(7,1), Vec2(0.5,10));
-    this->colliders.push_back(planCollider);
-    SphereCollider sphereCollider = SphereCollider(Vec2(2,3), 2.0);
+
+    // Colliders
+    PlanCollider groundCollider = PlanCollider(Vec2(0.0,1.0), Vec2(0.0,1.0));
+    PlanCollider leftWall = PlanCollider(Vec2(0,0), Vec2(1,0));
+    PlanCollider rightWall = PlanCollider(Vec2(15,0), Vec2(-1, 0));
+    this->colliders.push_back(groundCollider);
+    this->colliders.push_back(leftWall);
+    this->colliders.push_back(rightWall);
+  
+    SphereCollider sphereCollider = SphereCollider(Vec2(2,3), 1.0);
     this->colliders.push_back(sphereCollider);
+}
+
+Vec2 solve(StaticConstraint sc)
+{
+
+    Vec2 qc = sc.part_ptr->getExpPos() - (((sc.part_ptr->getExpPos() - sc.pc).dotProduct(sc.nc))*sc.nc);
+    Vec2 diff = sc.part_ptr->getExpPos() - qc;
+    float C = diff.dotProduct(sc.nc) - sc.part_ptr->getRad();
+    Vec2 delta = - C * sc.nc;
+    return delta;
 }
 
 void Context::addParticle(Particle particle) {
@@ -30,10 +46,6 @@ std::vector<Particle>& Context::getParticles() {
 std::vector<std::variant<PlanCollider,SphereCollider>>& Context::getColliders() {
     return colliders;
 }
-
-//std::vector<PlanCollider>& Context::getColliders() {
-//    return colliders;
-//}
 
 std::vector<StaticConstraint>& Context::getStaticConstraints() {
     return staticConstraints;
@@ -61,17 +73,21 @@ std::optional<DynamicConstraint> Context::checkDynamicContact(Particle& part1, P
 void Context::updatePhysicalSystem(float dt) {
     applyExternalForce(dt);
     updateExpectedPosition(dt);
-    addStaticContactConstraints(dt);
+
+    addStaticContactConstraints();
     addDynamicContactConstraints(dt);
     projectConstraints();
+
     updateVelocityAndPosition(dt);
+    deleteContactConstraints();
 }
 
-
 void Context::applyExternalForce(float dt) {
+
     // Gravity
     float m;
     float g = 9.81;
+
     for(int i=0; i<particles.size(); i++) {
         m = particles[i].getMass();
         const Vec2 Fg = Vec2(0,-m*g);
@@ -98,11 +114,20 @@ void Context::dampVelocities(float dt) {
 
 }
 
-void Context::addStaticContactConstraints(float dt) {
+void Context::addStaticContactConstraints() {
+
     for(int i=0; i<colliders.size(); i++) {
         for(int j=0; j<particles.size(); j++) {
 
-            //std::optional<StaticConstraint> sc = colliders[i].checkContact(particles[j]);
+            // variants and visitors as an alternative to inheritance
+            using colliderVariant = std::variant<PlanCollider, SphereCollider>;
+            colliderVariant coll_var = colliders[i];
+            auto sc = std::visit([j, this](auto arg)->std::optional<StaticConstraint>{return arg.checkContact(this->particles[j]);}, coll_var);
+
+            if (sc.has_value()){
+                StaticConstraint sc_val = sc.value();
+                staticConstraints.push_back(sc_val);
+            }
         }
     }
 }
@@ -121,8 +146,12 @@ void Context::addDynamicContactConstraints(float dt) {
 
 void Context::projectConstraints() {
     // Static constraints
-    // ...
-
+    std::vector<StaticConstraint>& staticConstraints = getStaticConstraints();
+    for (int i=0; i<staticConstraints.size(); i++){
+        Particle* part = staticConstraints[i].part_ptr;
+        part->setExpPos(part->getExpPos()+solve(staticConstraints[i]));
+    }
+  
     // Dynamic constraints
     for(int i=0; i<dynamicConstraints.size(); i++) {
         dynamicConstraints[i].enforceDynamicConstraint();
@@ -134,6 +163,9 @@ void Context::applyFriction(float dt) {
 }
 
 void Context::deleteContactConstraints() {
-
+    staticConstraints.clear();
 }
+
+
+
 
