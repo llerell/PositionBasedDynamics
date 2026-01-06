@@ -113,7 +113,7 @@ void DrawArea::mouseDoubleClickEvent(QMouseEvent *event) {
     QPointF position = event->position();
     Vec2 viewPos = Vec2(position.x(), position.y());
     Vec2 worldPos = viewToWorld(viewPos);
-    Particle particle = Particle(worldPos, Vec2(), 1, 1);
+    Particle particle = Particle(worldPos, Vec2(), 0.5, 1);
     context.addParticle(particle);
     this->update();
 }

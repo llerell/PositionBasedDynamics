@@ -8,7 +8,7 @@
 #include "spherecollider.h"
 #include <vector>
 #include "vec2.h"
-
+#include <cmath>
 class Context
 {
 public:
