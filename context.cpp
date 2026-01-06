@@ -1,11 +1,9 @@
 #include "context.h"
-#include "plancollider.h"
-#include "spherecollider.h"
 
 
 Context::Context() {
     this->particles = std::vector<Particle>();
-    this->colliders = std::vector<std::variant<PlanCollider,SphereCollider>>();
+    this->colliders = std::vector<std::variant<PlanCollider,SphereCollider, BoxCollider>>();
     this->staticConstraints = std::vector<StaticConstraint>();
     this->dynamicConstraints = std::vector<DynamicConstraint>();
 
@@ -13,10 +11,13 @@ Context::Context() {
     PlanCollider groundCollider = PlanCollider(Vec2(0.0,1.0), Vec2(0.0,1.0));
     PlanCollider leftWall = PlanCollider(Vec2(0,0), Vec2(1,0));
     PlanCollider rightWall = PlanCollider(Vec2(15,0), Vec2(-1, 0));
+
     this->colliders.push_back(groundCollider);
     this->colliders.push_back(leftWall);
     this->colliders.push_back(rightWall);
-  
+
+    BoxCollider box = BoxCollider(Vec2(7.0,3.0), Vec2(0.0,1.0), 2.0, 5.0);
+    this->colliders.push_back(box);
     SphereCollider sphereCollider = SphereCollider(Vec2(2,3), 1.0);
     this->colliders.push_back(sphereCollider);
 }
@@ -43,7 +44,7 @@ std::vector<Particle>& Context::getParticles() {
     return particles;
 }
 
-std::vector<std::variant<PlanCollider,SphereCollider>>& Context::getColliders() {
+std::vector<std::variant<PlanCollider,SphereCollider, BoxCollider>>& Context::getColliders() {
     return colliders;
 }
 
@@ -121,7 +122,7 @@ void Context::addStaticContactConstraints() {
         for(int j=0; j<particles.size(); j++) {
 
             // variants and visitors as an alternative to inheritance
-            using colliderVariant = std::variant<PlanCollider, SphereCollider>;
+            using colliderVariant = std::variant<PlanCollider, SphereCollider, BoxCollider>;
             colliderVariant coll_var = colliders[i];
             auto sc = std::visit([j, this](auto arg)->std::optional<StaticConstraint>{return arg.checkContact(this->particles[j]);}, coll_var);
 

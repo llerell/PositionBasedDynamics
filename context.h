@@ -6,9 +6,11 @@
 #include "particle.h"
 #include "plancollider.h"
 #include "spherecollider.h"
+#include "boxcollider.h"
 #include <vector>
 #include "vec2.h"
 #include <cmath>
+
 class Context
 {
 public:
@@ -20,7 +22,7 @@ public:
 
     std::vector<Particle>& getParticles();
 
-    std::vector<std::variant<PlanCollider, SphereCollider>>& getColliders();
+    std::vector<std::variant<PlanCollider, SphereCollider, BoxCollider>>& getColliders();
     //std::vector<PlanCollider>& getColliders();
 
     std::vector<StaticConstraint>& getStaticConstraints();
@@ -33,8 +35,7 @@ public:
 
 private:
     std::vector<Particle> particles;
-    std::vector<std::variant<PlanCollider,SphereCollider>> colliders;
-    //std::vector<PlanCollider> colliders;
+    std::vector<std::variant<PlanCollider,SphereCollider, BoxCollider>> colliders;
     std::vector<StaticConstraint> staticConstraints;
     std::vector<DynamicConstraint> dynamicConstraints;
 

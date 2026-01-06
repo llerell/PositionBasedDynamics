@@ -34,6 +34,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         plancollider.h plancollider.cpp
         spherecollider.h spherecollider.cpp
         DynamicConstraint.h
+        boxcollider.h boxcollider.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET CProject APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
