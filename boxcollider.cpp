@@ -1,6 +1,6 @@
 #include "boxcollider.h"
 
-BoxCollider::BoxCollider(Vec2 pc_, Vec2 u_, float width_, float height_):Collider(), pc(pc_), u(u_*(1/(u.length()))), width(width_), height(height_), v(Vec2(-u.getY(), u.getX())) {}
+BoxCollider::BoxCollider(Vec2 pc_, Vec2 u_, float width_, float height_):Collider(), pc(pc_), u(u_*(1.0/(u_.length()))), width(width_), height(height_), v(Vec2(-u.getY(), u.getX())) {}
 
 
 std::optional<StaticConstraint> BoxCollider::checkContact(Particle& collider) {
@@ -9,35 +9,57 @@ std::optional<StaticConstraint> BoxCollider::checkContact(Particle& collider) {
     Vec2 v = this->getV();
     float height = this->getHeight();
     float width = this->getWidth();
+
+    // aaaaaaaaaah it's more complicated than I thought
+    // rounded corners : if the distance between the center of the particle and the corner is less than R
     float x = u.dotProduct(diff);
     float y = v.dotProduct(diff);
-
-
-    if ((x>0)&&(x < collider.getRad()+width/2.0)){
+    if ((x>0)&&(x < collider.getRad()+width/2.0)  &&  (y>-height/2.0) && (y<height/2.0)){
         StaticConstraint sc;
         sc.nc = u;
         sc.pc = this->getCenter() + (width/2.0)*u;
         sc.part_ptr=&collider;
         return sc;
-    } else if ((x<0) && (x > -collider.getRad()-width/2.0)){
+
+    } else if ((x<0) && (x > -collider.getRad()-width/2.0)&&  (y>-height/2.0) && (y<height/2.0)){
         StaticConstraint sc;
         sc.nc = -1*u;
         sc.pc = this->getCenter() - (width/2.0)*u;
         sc.part_ptr=&collider;
         return sc;
     }
-    if ((y>0)&&(x < collider.getRad()+height/2.0)){
+    if ((y>0)&&(y < collider.getRad()+height/2.0) &&  (x>-width/2.0) && (x<width/2.0)){
         StaticConstraint sc;
         sc.nc = v;
         sc.pc = this->getCenter() + (height/2.0)*v;
         sc.part_ptr=&collider;
         return sc;
-    } else if ((y<0) && (y > -collider.getRad()-height/2.0)){
+
+    } else if ((y<0) && (y > -collider.getRad()-height/2.0)&&  (x>-width/2.0) && (x<width/2.0)){
         StaticConstraint sc;
         sc.nc = -1*v;
         sc.pc = this->getCenter() - (height/2.0)*v;
         sc.part_ptr=&collider;
         return sc;
+    }
+    // corners : linearised constraint originating from each corner
+    // come after the other constraint checks
+
+    Vec2 p1 = this->getCenter()+(width/2)*u+(height/2)*v;
+    Vec2 p2 = this->getCenter()-(width/2)*u+(height/2)*v;
+    Vec2 p3 = this->getCenter()-(width/2)*u-(height/2)*v;
+    Vec2 p4 = this->getCenter()+(width/2)*u-(height/2)*v;
+
+    Vec2 p[4] = {p1,p2,p3,p4};
+
+    for (int i=0; i<4; i++){
+        if((p[i]-collider.getExpPos()).length()<collider.getRad()){
+            StaticConstraint sc;
+            sc.nc = (1/(collider.getExpPos() - p[i]).length())*(collider.getExpPos() - p[i]);
+            sc.pc = p[i];
+            sc.part_ptr = &collider;
+            return sc;
+        }
     }
     return {};
 }

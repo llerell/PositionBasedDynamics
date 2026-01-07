@@ -98,16 +98,16 @@ void DrawArea::drawCollider(QPainter *painter, BoxCollider boxCollider) {
     Vec2 v = boxCollider.getV();
     float width = boxCollider.getWidth();
     float height = boxCollider.getHeight();
-    Vec2 p1 = worldToView(boxCollider.getCenter() + (width/2 * v) + (height/2 * u));
-    Vec2 p2 = worldToView(boxCollider.getCenter() + (width/2 * v) - (height/2 * u));
-    Vec2 p3 = worldToView(boxCollider.getCenter() - (width/2 * v) + (height/2 * u));
-    Vec2 p4 = worldToView(boxCollider.getCenter() - (width/2 * v) - (height/2 * u));
+    Vec2 p1 = worldToView(boxCollider.getCenter() + (width/2 * u) + (height/2 * v));
+    Vec2 p2 = worldToView(boxCollider.getCenter() + (width/2 * u) - (height/2 * v));
+    Vec2 p3 = worldToView(boxCollider.getCenter() - (width/2 * u) + (height/2 * v));
+    Vec2 p4 = worldToView(boxCollider.getCenter() - (width/2 * u) - (height/2 * v));
 
     QList<QPoint> points;
     points.append(QPoint(p1.getX(), p1.getY()));
     points.append(QPoint(p2.getX(), p2.getY()));
-    points.append(QPoint(p3.getX(), p3.getY()));
     points.append(QPoint(p4.getX(), p4.getY()));
+    points.append(QPoint(p3.getX(), p3.getY()));
     points.append(QPoint(p1.getX(), p1.getY()));
     QPolygon polygon = QPolygon(points);
     painter->drawPolygon(polygon);

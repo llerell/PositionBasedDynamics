@@ -16,9 +16,10 @@ Context::Context() {
     this->colliders.push_back(leftWall);
     this->colliders.push_back(rightWall);
 
-    BoxCollider box = BoxCollider(Vec2(7.0,3.0), Vec2(0.0,1.0), 2.0, 5.0);
+    BoxCollider box = BoxCollider(Vec2(7,3), Vec2(0,1), 2, 5);
     this->colliders.push_back(box);
-    SphereCollider sphereCollider = SphereCollider(Vec2(2,3), 1.0);
+
+    SphereCollider sphereCollider = SphereCollider(Vec2(2,3), 1);
     this->colliders.push_back(sphereCollider);
 }
 
