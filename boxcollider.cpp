@@ -14,7 +14,7 @@ std::optional<StaticConstraint> BoxCollider::checkContact(Particle& collider) {
     // rounded corners : if the distance between the center of the particle and the corner is less than R
     float x = u.dotProduct(diff);
     float y = v.dotProduct(diff);
-    if ((x>0)&&(x < collider.getRad()+width/2.0)  &&  (y>-height/2.0) && (y<height/2.0)){
+    if ((x > 0)&&(x < collider.getRad()+width/2.0)  &&  (y>-height/2.0) && (y<height/2.0)){
         StaticConstraint sc;
         sc.nc = u;
         sc.pc = this->getCenter() + (width/2.0)*u;
@@ -28,22 +28,22 @@ std::optional<StaticConstraint> BoxCollider::checkContact(Particle& collider) {
         sc.part_ptr=&collider;
         return sc;
     }
-    if ((y>0)&&(y < collider.getRad()+height/2.0) &&  (x>-width/2.0) && (x<width/2.0)){
+    if ((y > 0)&&(y < collider.getRad()+height/2.0) &&  (x>-width/2.0) && (x<width/2.0)){
         StaticConstraint sc;
         sc.nc = v;
         sc.pc = this->getCenter() + (height/2.0)*v;
         sc.part_ptr=&collider;
         return sc;
 
-    } else if ((y<0) && (y > -collider.getRad()-height/2.0)&&  (x>-width/2.0) && (x<width/2.0)){
+    } else if (( y <0) && (y > -collider.getRad()-height/2.0)&&  (x>-width/2.0) && (x<width/2.0)){
         StaticConstraint sc;
         sc.nc = -1*v;
         sc.pc = this->getCenter() - (height/2.0)*v;
         sc.part_ptr=&collider;
         return sc;
     }
-    // corners : linearised constraint originating from each corner
-    // come after the other constraint checks
+    // coins : contraintes linéarisées originant de chaque coin
+    // les autres vérifications ont été réalisées précédemment
 
     Vec2 p1 = this->getCenter()+(width/2)*u+(height/2)*v;
     Vec2 p2 = this->getCenter()-(width/2)*u+(height/2)*v;
@@ -55,6 +55,8 @@ std::optional<StaticConstraint> BoxCollider::checkContact(Particle& collider) {
     for (int i=0; i<4; i++){
         if((p[i]-collider.getExpPos()).length()<collider.getRad()){
             StaticConstraint sc;
+
+            // normale : vecteur unité de la différence
             sc.nc = (1/(collider.getExpPos() - p[i]).length())*(collider.getExpPos() - p[i]);
             sc.pc = p[i];
             sc.part_ptr = &collider;
