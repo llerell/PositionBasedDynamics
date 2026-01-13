@@ -10,8 +10,9 @@ std::optional<StaticConstraint> BoxCollider::checkContact(Particle& collider) {
     float height = this->getHeight();
     float width = this->getWidth();
 
-    // aaaaaaaaaah it's more complicated than I thought
-    // rounded corners : if the distance between the center of the particle and the corner is less than R
+    // côtés (hors coins)
+
+    // (x,y) écriture de la position de la particule dans le repère (u,v) centré en P
     float x = u.dotProduct(diff);
     float y = v.dotProduct(diff);
     if ((x > 0)&&(x < collider.getRad()+width/2.0)  &&  (y>-height/2.0) && (y<height/2.0)){
@@ -42,6 +43,7 @@ std::optional<StaticConstraint> BoxCollider::checkContact(Particle& collider) {
         sc.part_ptr=&collider;
         return sc;
     }
+
     // coins : contraintes linéarisées originant de chaque coin
     // les autres vérifications ont été réalisées précédemment
 

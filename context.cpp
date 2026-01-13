@@ -7,8 +7,8 @@ Context::Context() {
     this->staticConstraints = std::vector<StaticConstraint>();
     this->dynamicConstraints = std::vector<DynamicConstraint>();
 
-    // Colliders
-    PlanCollider groundCollider = PlanCollider(Vec2(0.0,1.0), Vec2(0.0,1.0));
+    // Wall colliders
+    PlanCollider groundCollider = PlanCollider(Vec2(0.0,0.0), Vec2(0.0,1.0));
     PlanCollider leftWall = PlanCollider(Vec2(0,0), Vec2(1,0));
     PlanCollider rightWall = PlanCollider(Vec2(15,0), Vec2(-1, 0));
 
@@ -16,16 +16,17 @@ Context::Context() {
     this->colliders.push_back(leftWall);
     this->colliders.push_back(rightWall);
 
-    BoxCollider box = BoxCollider(Vec2(7,3), Vec2(0,1), 2, 5);
+    // Rectangular box
+    BoxCollider box = BoxCollider(Vec2(7,3), Vec2(0,1), 2, 7);
     this->colliders.push_back(box);
 
+    // Static sphere
     SphereCollider sphereCollider = SphereCollider(Vec2(2,3), 1);
     this->colliders.push_back(sphereCollider);
 }
 
 Vec2 solve(StaticConstraint sc)
 {
-
     Vec2 qc = sc.part_ptr->getExpPos() - (((sc.part_ptr->getExpPos() - sc.pc).dotProduct(sc.nc))*sc.nc);
     Vec2 diff = sc.part_ptr->getExpPos() - qc;
     float C = diff.dotProduct(sc.nc) - sc.part_ptr->getRad();
@@ -80,9 +81,10 @@ void Context::updatePhysicalSystem(float dt) {
     addStaticContactConstraints();
     addDynamicContactConstraints(dt);
     projectConstraints();
+    deleteContactConstraints();
+
 
     updateVelocityAndPosition(dt);
-    deleteContactConstraints();
 }
 
 void Context::applyExternalForce(float dt) {
@@ -136,7 +138,6 @@ void Context::addStaticContactConstraints() {
 }
 
 void Context::addDynamicContactConstraints(float dt) {
-    dynamicConstraints.clear();
     for(int i=0; i<particles.size(); i++) {
         for(int j=i+1; j<particles.size(); j++) {
             std::optional<DynamicConstraint> dc = checkDynamicContact(particles[i], particles[j]);
@@ -178,6 +179,7 @@ void Context::applyFriction(float dt) {
 
 void Context::deleteContactConstraints() {
     staticConstraints.clear();
+    dynamicConstraints.clear();
 }
 
 

@@ -131,7 +131,11 @@ void DrawArea::mouseDoubleClickEvent(QMouseEvent *event) {
 
 // Redraw another ellipse below the precedent
 void DrawArea::animate() {
-    context.updatePhysicalSystem(0.01);
+    float dt = 0.01;
+    float n = 10;
+    for (int i=0; i<n; i++){
+        context.updatePhysicalSystem(dt/n);
+    }
     this->update();
 }
 
