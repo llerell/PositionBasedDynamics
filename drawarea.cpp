@@ -51,7 +51,7 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
         std::variant<PlanCollider, SphereCollider> coll_var = context.getColliders()[i];
         std::visit([painter, this](auto& arg) {drawCollider(painter, arg);}, coll_var);
     }
-    
+
     Vec2 viewPos;
     for(int i=0; i<context.getNbParticles(); i++) {
         Particle part = particles[i];
@@ -109,10 +109,12 @@ void DrawArea::mouseDoubleClickEvent(QMouseEvent *event) {
     this->update();
 }
 
-// Redraw another ellipse below the precedent
 void DrawArea::animate() {
-    context.updatePhysicalSystem(0.01);
+    context.updatePhysicalSystem(0.02);
     this->update();
 }
 
-
+void DrawArea::reset() {
+    context.reset();
+    this->update();
+}

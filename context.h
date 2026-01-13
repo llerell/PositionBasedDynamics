@@ -31,6 +31,10 @@ public:
 
     std::optional<DynamicConstraint> checkDynamicContact(Particle& part1, Particle& part2);
 
+    void destroyParticles();
+
+    void reset();
+
 private:
     std::vector<Particle> particles;
     std::vector<std::variant<PlanCollider,SphereCollider>> colliders;

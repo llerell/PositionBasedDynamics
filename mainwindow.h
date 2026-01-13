@@ -25,9 +25,8 @@ public:
 
 
 private:
-    Ui::MainWindow *ui;
-    // Ui::MainWindow : classe générée automatiquement à partir d’un fichier .ui décrivant le contenu de l’interface graphique
-    QPushButton *start_button;
+    Ui::MainWindow *ui; // Classe générée automatiquement à partir d’un fichier .ui décrivant le contenu de l’interface graphique
+    QPushButton *reset_button;
     QLabel *label;
     DrawArea *draw_area;
     int nb_milliseconds;

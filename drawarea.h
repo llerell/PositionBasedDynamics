@@ -29,6 +29,7 @@ public:
 
     void animate();
 
+    void reset();
 
 
 private:
