@@ -21,7 +21,8 @@ Context::Context() {
     this->colliders.push_back(box);
 
     // Static sphere
-    SphereCollider sphereCollider = SphereCollider(Vec2(2,3), 1);
+
+    SphereCollider sphereCollider = SphereCollider(Vec2(2,3), 1.0, true);
     this->colliders.push_back(sphereCollider);
 }
 
@@ -84,6 +85,8 @@ void Context::updatePhysicalSystem(float dt) {
     deleteContactConstraints();
 
 
+    destroyParticles();     // Destructions of the particles after too many dynamic collisions
+
     updateVelocityAndPosition(dt);
 }
 
@@ -132,6 +135,9 @@ void Context::addStaticContactConstraints() {
             if (sc.has_value()){
                 StaticConstraint sc_val = sc.value();
                 staticConstraints.push_back(sc_val);
+                if(std::visit([](auto arg)->bool{return arg.canDestroy();}, coll_var)) {
+                    particles[j].addCollision();
+                }
             }
         }
     }
@@ -182,6 +188,12 @@ void Context::deleteContactConstraints() {
     dynamicConstraints.clear();
 }
 
+// Destroys the particles after too many collisions
+void Context::destroyParticles() {
+    particles.erase(std::remove_if(particles.begin(),particles.end(), [](Particle part) { return part.checkNbCollisions(); }), particles.end());
+}
 
-
-
+// Reset the context (remove all particles)
+void Context::reset() {
+    particles.clear();
+}
