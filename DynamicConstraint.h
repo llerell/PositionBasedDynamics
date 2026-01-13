@@ -25,6 +25,10 @@ inline void DynamicConstraint::enforceDynamicConstraint() {
     Vec2 delta2 = (sig2/d)*(p1-p2);
     ptr_part1->setExpPos(p1+delta1);
     ptr_part2->setExpPos(p2+delta2);
+
+    // Increases counter of contacts
+    ptr_part1->addCollision();
+    ptr_part2->addCollision();
 }
 
 #endif // DYNAMICCONSTRAINT_H

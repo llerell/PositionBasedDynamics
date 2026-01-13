@@ -32,6 +32,11 @@ public:
 
     const QColor getColor() const;
 
+    // Destruction after too many dynamic collisions
+    void addCollision();
+
+    bool checkNbCollisions();
+
 
 private:
     Vec2 pos;
@@ -45,6 +50,11 @@ private:
     float mass;
 
     QColor color;
+
+    // Destruction after too many dynamic collisions
+    int nbCollisions;
+
+    int maxCollisions = 50;
 };
 
 #endif // PARTICLE_H
