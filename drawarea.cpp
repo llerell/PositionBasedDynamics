@@ -131,3 +131,7 @@ void DrawArea::reset() {
 void DrawArea::randomColor() {
     is_random = !(is_random);
 }
+
+void DrawArea::activeCollisions() {
+    context.changeCollisions();
+}

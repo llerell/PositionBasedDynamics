@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     reset_button = new QPushButton("Reset");
     random_colors = new QCheckBox("Random Colors");
+    active_collisions = new QCheckBox("Active Collisions");
 
     nb_milliseconds = 5;
 
@@ -24,9 +25,11 @@ MainWindow::MainWindow(QWidget *parent)
     layout->addWidget(draw_area);
     layout->addWidget(reset_button);
     layout->addWidget(random_colors);
+    layout->addWidget(active_collisions);
 
     QObject::connect(reset_button, &QPushButton::clicked, draw_area, &DrawArea::reset);
     QObject::connect(random_colors, &QCheckBox::checkStateChanged, draw_area, &DrawArea::randomColor);
+    QObject::connect(active_collisions, &QCheckBox::checkStateChanged, draw_area, &DrawArea::activeCollisions);
 
     // Animate: Timer
     auto timer = new QTimer();

@@ -35,12 +35,15 @@ public:
 
     void reset();
 
+    void changeCollisions();
+
 private:
     std::vector<Particle> particles;
     std::vector<std::variant<PlanCollider,SphereCollider>> colliders;
     //std::vector<PlanCollider> colliders;
     std::vector<StaticConstraint> staticConstraints;
     std::vector<DynamicConstraint> dynamicConstraints;
+    bool collisions;
 
     void applyExternalForce(float dt);
     void updateVelocityAndPosition(float dt);

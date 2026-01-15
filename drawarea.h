@@ -33,6 +33,8 @@ public:
 
     void randomColor();
 
+    void activeCollisions();
+
 
 private:
     Vec2 worldToView(Vec2 world_pos);
