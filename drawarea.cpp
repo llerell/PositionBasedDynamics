@@ -11,6 +11,7 @@ DrawArea::DrawArea(QWidget *parent)
     this->setFixedSize(QSize(height*ratio,height));
     context = Context();
     std::srand(std::time({}));
+    is_random = false;
 }
 
 void DrawArea::paintEvent(QPaintEvent *event)  {
@@ -99,10 +100,16 @@ void DrawArea::mouseDoubleClickEvent(QMouseEvent *event) {
     QPointF position = event->position();
     Vec2 viewPos = Vec2(position.x(), position.y());
     Vec2 worldPos = viewToWorld(viewPos);
+    QColor color;
 
-    // Random color
-    int rd = std::rand() % partColors.size();
-    QColor color = partColors[rd];
+    if(is_random) {
+        // Random color
+        int rd = std::rand() % partColors.size();
+        color = partColors[rd];
+    }
+    else {
+        color = defaultPartColor;
+    }
 
     Particle particle = Particle(worldPos, Vec2(), 0.5, 1, color);
     context.addParticle(particle);
@@ -117,4 +124,8 @@ void DrawArea::animate() {
 void DrawArea::reset() {
     context.reset();
     this->update();
+}
+
+void DrawArea::randomColor() {
+    is_random = !(is_random);
 }

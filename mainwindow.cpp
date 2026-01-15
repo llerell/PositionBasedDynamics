@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
     draw_area = new DrawArea();
 
     reset_button = new QPushButton("Reset");
+    random_colors = new QCheckBox("Random Colors");
 
     nb_milliseconds = 5;
 
@@ -22,9 +23,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     layout->addWidget(draw_area);
     layout->addWidget(reset_button);
+    layout->addWidget(random_colors);
 
     QObject::connect(reset_button, &QPushButton::clicked, draw_area, &DrawArea::reset);
-
+    QObject::connect(random_colors, &QCheckBox::checkStateChanged, draw_area, &DrawArea::randomColor);
 
     // Animate: Timer
     auto timer = new QTimer();
