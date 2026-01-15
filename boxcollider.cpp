@@ -1,6 +1,6 @@
 #include "boxcollider.h"
 
-BoxCollider::BoxCollider(Vec2 pc_, Vec2 u_, float width_, float height_):Collider(), pc(pc_), u(u_*(1.0/(u_.length()))), width(width_), height(height_), v(Vec2(-u.getY(), u.getX())) {}
+BoxCollider::BoxCollider(Vec2 pc_, Vec2 u_, float width_, float height_):Collider(), pc(pc_), u(u_*(1.0/(u_.length()))), width(width_), height(height_), v(Vec2(-u.getY(), u.getX())), isKiller(false) {}
 
 
 std::optional<StaticConstraint> BoxCollider::checkContact(Particle& collider) {
@@ -87,3 +87,4 @@ float BoxCollider::getHeight(){
     return height;
 }
 
+bool BoxCollider::canDestroy(){return isKiller;}

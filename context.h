@@ -4,7 +4,7 @@
 #include "DynamicConstraint.h"
 #include "collider.h"
 #include "particle.h"
-#include "plancollider.h"
+#include "planecollider.h"
 #include "spherecollider.h"
 #include "boxcollider.h"
 #include <vector>
@@ -20,39 +20,68 @@ public:
 
     int getNbParticles();
 
+    /// return std::vector of all particles listed in the context.
     std::vector<Particle>& getParticles();
 
-    std::vector<std::variant<PlanCollider, SphereCollider, BoxCollider>>& getColliders();
-    //std::vector<PlanCollider>& getColliders();
+    /// return std::vector of Colliders, whether Plane, Spherical, of Rectangular.
+    std::vector<std::variant<PlaneCollider, SphereCollider, BoxCollider>>& getColliders();
 
     std::vector<StaticConstraint>& getStaticConstraints();
 
     std::vector<DynamicConstraint>& getDynamicConstraints();
 
+    /// updates all particles and their attributes for the next iteration.
     void updatePhysicalSystem(float dt);
 
+    /**
+     * @brief Check if input part1 and part2 are in contact according to their expected positions
+     * and return DynamicConstraint if so.
+     * @param part1, part2 Particle& input
+     * @returns std::optional value containing DynamicContact if contact is detected.
+     */
     std::optional<DynamicConstraint> checkDynamicContact(Particle& part1, Particle& part2);
 
+    /// Destroys particles after too many collisions.
     void destroyParticles();
 
+    /// Reset the context (remove all particles).
     void reset();
 
 private:
     std::vector<Particle> particles;
-    std::vector<std::variant<PlanCollider,SphereCollider, BoxCollider>> colliders;
+    std::vector<std::variant<PlaneCollider,SphereCollider, BoxCollider>> colliders;
     std::vector<StaticConstraint> staticConstraints;
     std::vector<DynamicConstraint> dynamicConstraints;
 
+    /// Sets velocity of each particle according to external forces implemented herein.
     void applyExternalForce(float dt);
+
+    /// For each particle, sets position to new expected position and velocity to the difference between current position and previous position.
     void updateVelocityAndPosition(float dt);
+
+    /// Sets expected position of each particle according to its velocity.
     void updateExpectedPosition(float dt);
-    void dampVelocities(float dt);
-    void addDynamicContactConstraints(float dt);
+
+    /// Add contact constraints between particles when expected positions make them overlap.
+    void addDynamicContactConstraints();
+
+    /**
+     * @brief Add contact constraints between particles and static environment obstacles when expected positions make them overlap,
+     * e.g. Box colliders and spherical colliders.
+     */
     void addStaticContactConstraints();
+
+    /// Calculates new positions of each particle according to all constraints.
     void projectConstraints();
+
+    /**
+     * @brief Calculates friction applied to each particle and updates its velocity accordingly.
+     */
     void applyFriction(float dt);
+
+    /// delete all contact constraints from the context, both static and dynamic.
     void deleteContactConstraints();
 
 };
-Vec2 solve(StaticConstraint sc);
+
 #endif // CONTEXT_H

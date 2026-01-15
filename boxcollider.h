@@ -18,10 +18,12 @@ public:
     Vec2 getV();
     float getWidth();
     float getHeight();
+    bool canDestroy();
 
 private:
     Vec2 u, v, pc;
     float width, height;
+    bool isKiller;
 };
 
 #endif // BOXCOLLIDER_H

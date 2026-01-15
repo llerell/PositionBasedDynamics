@@ -6,7 +6,7 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include <QOpenGLFunctions>
-#include "plancollider.h"
+#include "planecollider.h"
 #include "spherecollider.h"
 #include "vec2.h"
 
@@ -22,7 +22,7 @@ public:
 
     void show(QPainter *painter, QPaintEvent *event, Context& context);
 
-    void drawCollider(QPainter *painter, PlanCollider plancollider);
+    void drawCollider(QPainter *painter, PlaneCollider PlaneCollider);
     void drawCollider(QPainter *painter, SphereCollider spherCollider);
     void drawCollider(QPainter *painter, BoxCollider boxCollider);
 

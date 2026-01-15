@@ -48,7 +48,7 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
     painter->setBrush(QBrush(colliderColor));
     std::vector<Particle> particles = context.getParticles();
     for(int i=0; i<context.getColliders().size(); i++) {
-        std::variant<PlanCollider, SphereCollider, BoxCollider> coll_var = context.getColliders()[i];
+        std::variant<PlaneCollider, SphereCollider, BoxCollider> coll_var = context.getColliders()[i];
         std::visit([painter, this](auto& arg) {drawCollider(painter, arg);}, coll_var);
     }
 
@@ -68,9 +68,9 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
     }
 }
 
-void DrawArea::drawCollider(QPainter *painter, PlanCollider planCollider) {
-    Vec2 pc = planCollider.getCenter();
-    Vec2 nc = planCollider.getNormal();
+void DrawArea::drawCollider(QPainter *painter, PlaneCollider PlaneCollider) {
+    Vec2 pc = PlaneCollider.getCenter();
+    Vec2 nc = PlaneCollider.getNormal();
     Vec2 p1, p2;
 
     if (nc.getY()!=0){

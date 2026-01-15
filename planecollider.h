@@ -1,17 +1,17 @@
-#ifndef PLANCOLLIDER_H
-#define PLANCOLLIDER_H
+#ifndef PLANECOLLIDER_H
+#define PLANECOLLIDER_H
 
 #include "collider.h"
 #include "vec2.h"
 
-class PlanCollider : public Collider
+class PlaneCollider : public Collider
 {
 public:
-    PlanCollider(Vec2 pc_, Vec2 nc_);
+    PlaneCollider(Vec2 pc_, Vec2 nc_);
 
-    PlanCollider(Vec2 pc_, Vec2 nc_, bool isKiller_);
+    PlaneCollider(Vec2 pc_, Vec2 nc_, bool isKiller_);
 
-    ~PlanCollider() override {}
+    ~PlaneCollider() override {}
 
     std::optional<StaticConstraint> checkContact(Particle& collider) override;
 
@@ -28,4 +28,4 @@ private:
     bool isKiller;  // If the collider can destroy the particles
 };
 
-#endif // PLANCOLLIDER_H
+#endif // PLANECOLLIDER_H
