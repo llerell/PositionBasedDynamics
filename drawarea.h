@@ -57,6 +57,8 @@ private:
     QColor defaultColliderColor = Qt::black;
     QColor defaultPartColor = Qt::gray;
 
+    int nbUpdate;   // Number of calls to updatePhysicalSystem before redrawing
+
 signals:
 };
 

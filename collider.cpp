@@ -8,16 +8,11 @@ QColor healerCol = Qt::green;
 Collider::Collider() : isKiller(false), isHealer(false), color(neutralCol) {}
 
 Collider::Collider(bool isKiller_, bool isHealer_) : isKiller(isKiller_), isHealer(isHealer_) {
-    if(isKiller_) {
-        if(isHealer_) {
-            color = neutralCol;
-        }
-        else {
-            color = killerCol;
-        }
-    }
-    else if(isHealer_) {
+    if(isHealer_) {
         color = healerCol;
+    }
+    else if(isKiller_) {
+        color = killerCol;
     }
     else {
         color = neutralCol;

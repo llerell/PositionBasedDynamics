@@ -12,7 +12,8 @@ DrawArea::DrawArea(QWidget *parent)
     context = Context();
     std::srand(std::time({}));
     is_random = false;
-    healthPoints = 50;
+    nbUpdate = 10;
+    healthPoints = nbUpdate*50;
 }
 
 void DrawArea::paintEvent(QPaintEvent *event)  {
@@ -108,10 +109,10 @@ void DrawArea::drawCollider(QPainter *painter, BoxCollider boxCollider) {
     Vec2 v = boxCollider.getV();
     float width = boxCollider.getWidth();
     float height = boxCollider.getHeight();
-    Vec2 p1 = worldToView(boxCollider.getCenter() + (width/2 * u) + (height/2 * v));
-    Vec2 p2 = worldToView(boxCollider.getCenter() + (width/2 * u) - (height/2 * v));
-    Vec2 p3 = worldToView(boxCollider.getCenter() - (width/2 * u) + (height/2 * v));
-    Vec2 p4 = worldToView(boxCollider.getCenter() - (width/2 * u) - (height/2 * v));
+    Vec2 p1 = worldToView(boxCollider.getPoint() + (width/2 * u) + (height/2 * v));
+    Vec2 p2 = worldToView(boxCollider.getPoint() + (width/2 * u) - (height/2 * v));
+    Vec2 p3 = worldToView(boxCollider.getPoint() - (width/2 * u) + (height/2 * v));
+    Vec2 p4 = worldToView(boxCollider.getPoint() - (width/2 * u) - (height/2 * v));
 
     QList<QPoint> points;
     points.append(QPoint(p1.getX(), p1.getY()));
@@ -149,7 +150,7 @@ void DrawArea::mouseDoubleClickEvent(QMouseEvent *event) {
 
 void DrawArea::animate() {
     float dt = 0.01;
-    float n = 10;
+    float n = float(nbUpdate);
     for (int i=0; i<n; i++){
         context.updatePhysicalSystem(dt/n);
     }
@@ -170,5 +171,7 @@ void DrawArea::activeCollisions() {
 }
 
 void DrawArea::setHealth(int newHealth) {
-    healthPoints = newHealth;
+    // Collisions are checked several times between two visual states
+    // So we need more health points to see them correctly
+    healthPoints = nbUpdate*newHealth;
 }

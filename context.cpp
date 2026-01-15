@@ -18,7 +18,7 @@ Context::Context() {
     this->colliders.push_back(rightWall);
 
     // Rectangular box
-    BoxCollider box = BoxCollider(Vec2(7,3), Vec2(0,1), 2, 7);
+    BoxCollider box = BoxCollider(Vec2(7,3), Vec2(0,1), 2, 7, true, true);
     this->colliders.push_back(box);
 
     // Static sphere

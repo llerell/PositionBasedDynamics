@@ -2,7 +2,6 @@
 #define CONTEXT_H
 #include "StaticConstraint.h"
 #include "DynamicConstraint.h"
-#include "collider.h"
 #include "particle.h"
 #include "plancollider.h"
 #include "spherecollider.h"
