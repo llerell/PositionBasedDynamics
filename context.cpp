@@ -169,9 +169,10 @@ void Context::applyFriction(float dt) {
     for (int i=0; i<particles.size(); i++){
         Vec2 v = particles[i].getVelocity();
         float r = particles[i].getRad();
-        float S = M_PI * r * r;
+        float S = M_PI * r * r; // contact surface for a sphere = disc
 
         Vec2 F = -(1.0/2.0)*Cx*rho*S*v.length()*v;
+
         particles[i].setVelocity(v + F * (dt/particles[i].getMass()));
     }
 }
