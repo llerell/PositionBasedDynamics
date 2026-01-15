@@ -44,12 +44,14 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
     //int width = this->width();
 
     painter->fillRect(event->rect(), QBrush(Qt::white));
-
-    painter->setPen(colliderColor);
-    painter->setBrush(QBrush(colliderColor));
     std::vector<Particle> particles = context.getParticles();
+
+    QColor colliderColor;
     for(int i=0; i<context.getColliders().size(); i++) {
         std::variant<PlanCollider, SphereCollider> coll_var = context.getColliders()[i];
+        colliderColor = std::visit([this](auto& arg) -> QColor {return arg.getColor();}, coll_var);
+        painter->setPen(colliderColor);
+        painter->setBrush(QBrush(colliderColor));
         std::visit([painter, this](auto& arg) {drawCollider(painter, arg);}, coll_var);
     }
 
@@ -70,7 +72,7 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
 }
 
 void DrawArea::drawCollider(QPainter *painter, PlanCollider planCollider) {
-    Vec2 pc = planCollider.getCenter();
+    Vec2 pc = planCollider.getPoint();
     Vec2 nc = planCollider.getNormal();
     Vec2 p1, p2;
 
@@ -88,7 +90,7 @@ void DrawArea::drawCollider(QPainter *painter, PlanCollider planCollider) {
 }
 
 void DrawArea::drawCollider(QPainter *painter, SphereCollider sphereCollider) {
-    Vec2 pc = worldToView(sphereCollider.getCenter());
+    Vec2 pc = worldToView(sphereCollider.getPoint());
     float rc = this->height() * sphereCollider.getRadius()/m_height;
     QRectF target(pc.getX()-rc, pc.getY()-rc, 2*rc, 2*rc);
     painter->drawEllipse(target);

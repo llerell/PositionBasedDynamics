@@ -49,15 +49,24 @@ const QColor Particle::getColor() const {
     return color;
 }
 
-// Destruction after too many dynamic collisions
-void Particle::addCollision() {
-    nbCollisions++;
+void Particle::updateColor() {
     // Color depending on the number of collisions
     float coeff = float(nbCollisions)/float(maxCollisions);
     int red = round(initColor.red()+coeff*(destrColor.red()-initColor.red()));
     int green = round(initColor.green()+coeff*(destrColor.green()-initColor.green()));
     int blue = round(initColor.blue()+coeff*(destrColor.blue()-initColor.blue()));
     color = QColor(red, green, blue);
+}
+
+// Destruction after too many dynamic collisions
+void Particle::addCollision() {
+    nbCollisions++;
+    updateColor();
+}
+
+void Particle::removeCollision() {
+    nbCollisions = std::max(0, nbCollisions-2);
+    updateColor();
 }
 
 bool Particle::checkNbCollisions() {

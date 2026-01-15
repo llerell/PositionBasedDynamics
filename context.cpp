@@ -17,8 +17,11 @@ Context::Context() {
     this->colliders.push_back(leftWall);
     this->colliders.push_back(rightWall);
   
-    SphereCollider sphereCollider = SphereCollider(Vec2(2,3), 1.0, true);
+    SphereCollider sphereCollider = SphereCollider(Vec2(2,3), 1.0, true, false);
     this->colliders.push_back(sphereCollider);
+
+    SphereCollider healCollider = SphereCollider(Vec2(5,5), 1.0, false, true);
+    this->colliders.push_back(healCollider);
 }
 
 Vec2 solve(StaticConstraint sc)
@@ -132,6 +135,9 @@ void Context::addStaticContactConstraints() {
                 staticConstraints.push_back(sc_val);
                 if(std::visit([](auto arg)->bool{return arg.canDestroy();}, coll_var)) {
                     particles[j].addCollision();
+                }
+                if(std::visit([](auto arg)->bool{return arg.canHeal();}, coll_var)) {
+                    particles[j].removeCollision();
                 }
             }
         }

@@ -1,17 +1,15 @@
 #include "spherecollider.h"
 
 SphereCollider::SphereCollider(Vec2 pc_, float rc_)
-    : Collider(), pc(pc_), rc(rc_), isKiller(false) {
+    : Collider(), pc(pc_), rc(rc_) {
 
 }
 
-SphereCollider::SphereCollider(Vec2 pc_, float rc_, bool isKiller_)
-    : Collider(), pc(pc_), rc(rc_), isKiller(isKiller_) {
-
-}
+SphereCollider::SphereCollider(Vec2 pc_, float rc_, bool isKiller_, bool isHealer_)
+    : Collider(isKiller_, isHealer_), pc(pc_), rc(rc_) {}
 
 std::optional<StaticConstraint> SphereCollider::checkContact(Particle& collider) {
-    Vec2 diff = collider.getExpPos()-this->getCenter();
+    Vec2 diff = collider.getExpPos()-this->getPoint();
     float sdf = diff.length() - this->getRadius();
     if (sdf<collider.getRad()){
         StaticConstraint sc;
@@ -23,7 +21,7 @@ std::optional<StaticConstraint> SphereCollider::checkContact(Particle& collider)
     return {};
 }
 
-Vec2 SphereCollider::getCenter() {
+Vec2 SphereCollider::getPoint() {
     return pc;
 }
 
@@ -31,6 +29,6 @@ float SphereCollider::getRadius() {
     return rc;
 }
 
-bool SphereCollider::canDestroy() {
-    return isKiller;
-}
+//bool SphereCollider::canDestroy() {
+//    return isKiller;
+//}

@@ -29,7 +29,6 @@ private:
     Ui::MainWindow *ui; // Classe générée automatiquement à partir d’un fichier .ui décrivant le contenu de l’interface graphique
     QPushButton *reset_button;
     QCheckBox *random_colors;
-    QPushButton *random_color;
     QLabel *label;
     DrawArea *draw_area;
     int nb_milliseconds;

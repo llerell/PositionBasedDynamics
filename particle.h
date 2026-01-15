@@ -32,8 +32,12 @@ public:
 
     const QColor getColor() const;
 
+    void updateColor();
+
     // Destruction after too many dynamic collisions
     void addCollision();
+
+    void removeCollision();
 
     bool checkNbCollisions();
 
