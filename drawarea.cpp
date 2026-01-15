@@ -49,9 +49,15 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
     QColor colliderColor;
     for(int i=0; i<context.getColliders().size(); i++) {
         std::variant<PlanCollider, SphereCollider> coll_var = context.getColliders()[i];
-        colliderColor = std::visit([this](auto& arg) -> QColor {return arg.getColor();}, coll_var);
+        if(context.getCollisions()) {
+            colliderColor = std::visit([this](auto& arg) -> QColor {return arg.getColor();}, coll_var);
+        }
+        else {
+            colliderColor = defaultColliderColor;
+        }
         painter->setPen(colliderColor);
         painter->setBrush(QBrush(colliderColor));
+
         std::visit([painter, this](auto& arg) {drawCollider(painter, arg);}, coll_var);
     }
 
@@ -105,9 +111,11 @@ void DrawArea::mouseDoubleClickEvent(QMouseEvent *event) {
     QColor color;
 
     if(is_random) {
-        // Random color
-        int rd = std::rand() % partColors.size();
-        color = partColors[rd];
+        // Random color: int between 0 and 254 to avoid white (which would not be seen)
+        int red = std::rand() % 255;
+        int green = std::rand() % 255;
+        int blue = std::rand() % 255;
+        color = QColor(red,green,blue);
     }
     else {
         color = defaultPartColor;

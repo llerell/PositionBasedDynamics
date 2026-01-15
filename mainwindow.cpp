@@ -15,8 +15,8 @@ MainWindow::MainWindow(QWidget *parent)
     draw_area = new DrawArea();
 
     reset_button = new QPushButton("Reset");
-    random_colors = new QCheckBox("Random Colors");
-    active_collisions = new QCheckBox("Active Collisions");
+    random_colors = new QCheckBox("Random colors");
+    active_collisions = new QCheckBox("Active health points");
 
     nb_milliseconds = 5;
 

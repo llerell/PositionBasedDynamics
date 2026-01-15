@@ -35,6 +35,7 @@ public:
 
     void reset();
 
+    bool getCollisions();
     void changeCollisions();
 
 private:

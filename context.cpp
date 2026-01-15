@@ -205,6 +205,10 @@ void Context::reset() {
     particles.clear();
 }
 
+bool Context::getCollisions() {
+    return collisions;
+}
+
 void Context::changeCollisions() {
     collisions = !(collisions);
 }

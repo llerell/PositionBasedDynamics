@@ -49,9 +49,8 @@ private:
 
     bool is_random;
 
-    QColor colliderColor = Qt::black;
+    QColor defaultColliderColor = Qt::black;
     QColor defaultPartColor = Qt::gray;
-    std::vector<QColor> partColors = {Qt::darkGreen, Qt::darkBlue, QColor(230,200,0), Qt::gray, QColor(0,114,114), QColor(200,120,0), QColor(120,0,200)};
 
 signals:
 };
