@@ -32,9 +32,13 @@ public:
 
     const QColor getColor() const;
 
-    // Destruction after too many dynamic collisions
+    /// Add collision to the counter. Particles will get destroyed if the corresponding parameter is activated.
     void addCollision();
 
+    /**
+     * @brief check number of collisions suffered by the particle compared to lifetime.
+     * @return bool: whether the particles has suffered more collisions than maximum.
+     */
     bool checkNbCollisions();
 
 

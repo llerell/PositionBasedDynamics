@@ -1,8 +1,11 @@
 #include "planecollider.h"
 #include "vec2.h"
+
+
 PlaneCollider::PlaneCollider(Vec2 pc_, Vec2 nc_)
     : Collider(), pc(pc_), nc((1.0/nc_.length())*nc_), isKiller(false) {
 }
+
 
 PlaneCollider::PlaneCollider(Vec2 pc_, Vec2 nc_, bool isKiller_)
     : Collider(), pc(pc_), nc((1.0/nc_.length())*nc_), isKiller(isKiller_) {

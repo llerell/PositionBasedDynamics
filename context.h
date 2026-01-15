@@ -16,8 +16,10 @@ class Context
 public:
     Context();
 
+    /// push new Particle to the vector
     void addParticle(Particle particle);
 
+    /// get number of Particles present in the current context
     int getNbParticles();
 
     /// return std::vector of all particles listed in the context.
@@ -26,8 +28,10 @@ public:
     /// return std::vector of Colliders, whether Plane, Spherical, of Rectangular.
     std::vector<std::variant<PlaneCollider, SphereCollider, BoxCollider>>& getColliders();
 
+    /// return std::vector of all StaticConstraints between obstacles and particles.
     std::vector<StaticConstraint>& getStaticConstraints();
 
+    /// return std::vector of all DynamicConstraints between particles.
     std::vector<DynamicConstraint>& getDynamicConstraints();
 
     /// updates all particles and their attributes for the next iteration.
@@ -71,12 +75,10 @@ private:
      */
     void addStaticContactConstraints();
 
-    /// Calculates new positions of each particle according to all constraints.
+    /// Calculate new positions of each particle according to all constraints.
     void projectConstraints();
 
-    /**
-     * @brief Calculates friction applied to each particle and updates its velocity accordingly.
-     */
+    /// Calculate friction applied to each particle and updates its velocity accordingly.
     void applyFriction(float dt);
 
     /// delete all contact constraints from the context, both static and dynamic.

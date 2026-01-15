@@ -7,6 +7,9 @@ struct DynamicConstraint {
     Particle* ptr_part2;
     ~DynamicConstraint() {}
 
+    /**
+     * @brief solve constraint and adjust expected positions of both particles accordingly.
+     */
     void enforceDynamicConstraint();
 };
 

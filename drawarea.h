@@ -22,20 +22,30 @@ public:
 
     void show(QPainter *painter, QPaintEvent *event, Context& context);
 
+    /// draw a Plane collider.
     void drawCollider(QPainter *painter, PlaneCollider PlaneCollider);
-    void drawCollider(QPainter *painter, SphereCollider spherCollider);
+
+    /// draw a Spherical collider.
+    void drawCollider(QPainter *painter, SphereCollider sphereCollider);
+
+    /// draw a rectangular collider.
     void drawCollider(QPainter *painter, BoxCollider boxCollider);
 
+    /// create a particle at every double click input.
     void mouseDoubleClickEvent(QMouseEvent *event) override;
 
+    /// call update to physical system multiple times before showing the result.
     void animate();
 
+    /// reset context.
     void reset();
 
 
 private:
+    /// translate physical system coordinates in pixel coordinates.
     Vec2 worldToView(Vec2 world_pos);
 
+    /// translate pixel coordinates in physical system coordinates.
     Vec2 viewToWorld(Vec2 view_pos);
 
     Context context;
@@ -47,7 +57,6 @@ private:
     QColor colliderColor = Qt::black;
     std::vector<QColor> partColors = {Qt::darkRed, Qt::darkGreen, Qt::darkBlue, QColor(230,200,0), Qt::gray, QColor(0,114,114), QColor(200,120,0), QColor(120,0,200)};
 
-signals:
 };
 
 #endif // DRAWAREA_H

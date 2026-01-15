@@ -11,6 +11,9 @@ struct StaticConstraint
     Vec2 nc;
     Particle* part_ptr;
 
+    /**
+     * @brief solve constraint and adjust expected position of the particle accordingly.
+     */
     void enforceStaticConstraint();
 };
 
