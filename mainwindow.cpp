@@ -14,16 +14,17 @@ MainWindow::MainWindow(QWidget *parent)
 
     draw_area = new DrawArea();
 
+    reset_button = new QPushButton("Reset");
+
     nb_milliseconds = 10;
 
     QVBoxLayout *layout = new QVBoxLayout(ui->centralwidget); // constructor’s parameter is the widget that will use the layout
 
     layout->addWidget(draw_area);
+    layout->addWidget(reset_button);
 
+    QObject::connect(reset_button, &QPushButton::clicked, draw_area, &DrawArea::reset);
 
-    // Calls the paintEvent method in drawarea -> Draws an ellipse
-    //draw_area->update();
-    // How to stop the ellipse to be drawn when launching the project?
 
     // Animate: Timer
     auto timer = new QTimer();

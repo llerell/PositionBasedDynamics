@@ -1,7 +1,12 @@
 #include "spherecollider.h"
 
 SphereCollider::SphereCollider(Vec2 pc_, float rc_)
-    : Collider(), pc(pc_), rc(rc_) {
+    : Collider(), pc(pc_), rc(rc_), isKiller(false) {
+
+}
+
+SphereCollider::SphereCollider(Vec2 pc_, float rc_, bool isKiller_)
+    : Collider(), pc(pc_), rc(rc_), isKiller(isKiller_) {
 
 }
 
@@ -24,4 +29,8 @@ Vec2 SphereCollider::getCenter() {
 
 float SphereCollider::getRadius() {
     return rc;
+}
+
+bool SphereCollider::canDestroy() {
+    return isKiller;
 }
