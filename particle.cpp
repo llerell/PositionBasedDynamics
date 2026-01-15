@@ -1,7 +1,7 @@
 #include "particle.h"
 
-Particle::Particle(Vec2 pos_, Vec2 vel, float rad_, float mass_, QColor color_)
-    : pos(pos_), velocity(vel), rad(rad_), mass(mass_), expPos(pos_), color(color_), nbCollisions(0) {}
+Particle::Particle(Vec2 pos_, Vec2 vel, float rad_, float mass_, QColor initColor_)
+    : pos(pos_), velocity(vel), rad(rad_), mass(mass_), expPos(pos_), initColor(initColor_), color(initColor_), nbCollisions(0) {}
 
 Particle::Particle(): pos(Vec2{0,0}), velocity(Vec2{0,0}), mass(0.0), expPos(Vec2{0,0}), color(Qt::gray), nbCollisions(0) {}
 
@@ -52,6 +52,12 @@ const QColor Particle::getColor() const {
 // Destruction after too many dynamic collisions
 void Particle::addCollision() {
     nbCollisions++;
+    // Color depending on the number of collisions
+    float coeff = float(nbCollisions)/float(maxCollisions);
+    int red = round(initColor.red()+coeff*(destrColor.red()-initColor.red()));
+    int green = round(initColor.green()+coeff*(destrColor.green()-initColor.green()));
+    int blue = round(initColor.blue()+coeff*(destrColor.blue()-initColor.blue()));
+    color = QColor(red, green, blue);
 }
 
 bool Particle::checkNbCollisions() {

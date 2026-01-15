@@ -110,7 +110,7 @@ void DrawArea::mouseDoubleClickEvent(QMouseEvent *event) {
 }
 
 void DrawArea::animate() {
-    context.updatePhysicalSystem(0.02);
+    context.updatePhysicalSystem(0.01);
     this->update();
 }
 

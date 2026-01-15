@@ -49,6 +49,10 @@ private:
 
     float mass;
 
+    QColor initColor = QColor(200,200,200);
+
+    QColor destrColor = QColor(255,0,0);
+
     QColor color;
 
     // Destruction after too many dynamic collisions
