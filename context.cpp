@@ -2,6 +2,7 @@
 
 
 Context::Context() {
+    this->collisions = false;
     this->particles = std::vector<Particle>();
     this->colliders = std::vector<std::variant<PlanCollider,SphereCollider, BoxCollider>>();
     this->staticConstraints = std::vector<StaticConstraint>();
@@ -21,8 +22,11 @@ Context::Context() {
     this->colliders.push_back(box);
 
     // Static sphere
-    SphereCollider sphereCollider = SphereCollider(Vec2(2,3), 1);
+    SphereCollider sphereCollider = SphereCollider(Vec2(2,3), 1.0, true, false);
     this->colliders.push_back(sphereCollider);
+
+    SphereCollider healCollider = SphereCollider(Vec2(5,5), 1.0, false, true);
+    this->colliders.push_back(healCollider);
 }
 
 Vec2 solve(StaticConstraint sc)
@@ -134,8 +138,11 @@ void Context::addStaticContactConstraints() {
             if (sc.has_value()){
                 StaticConstraint sc_val = sc.value();
                 staticConstraints.push_back(sc_val);
-                if(std::visit([](auto arg)->bool{return arg.canDestroy();}, coll_var)) {
+                if(collisions & std::visit([](auto arg)->bool{return arg.canDestroy();}, coll_var)) {
                     particles[j].addCollision();
+                }
+                if(collisions & std::visit([](auto arg)->bool{return arg.canHeal();}, coll_var)) {
+                    particles[j].removeCollision();
                 }
             }
         }
@@ -148,6 +155,11 @@ void Context::addDynamicContactConstraints(float dt) {
             std::optional<DynamicConstraint> dc = checkDynamicContact(particles[i], particles[j]);
             if(dc.has_value()) {
                 dynamicConstraints.push_back(dc.value());
+                if(collisions) {
+                // Increases counter of contacts
+                    particles[i].addCollision();
+                    particles[j].addCollision();
+                }
             }
         }
     }
@@ -195,4 +207,12 @@ void Context::destroyParticles() {
 // Reset the context (remove all particles)
 void Context::reset() {
     particles.clear();
+}
+
+bool Context::getCollisions() {
+    return collisions;
+}
+
+void Context::changeCollisions() {
+    collisions = !(collisions);
 }

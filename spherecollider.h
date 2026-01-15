@@ -9,23 +9,20 @@ class SphereCollider : public Collider
 public:
     SphereCollider(Vec2 pc_, float rc_);
 
-    SphereCollider(Vec2 pc_, float rc_, bool isKiller_);
+    SphereCollider(Vec2 pc_, float rc_, bool isKiller_, bool isHealer_);
 
     ~SphereCollider() override = default;
 
     std::optional<StaticConstraint> checkContact(Particle& collider) override;
 
-    Vec2 getCenter() override;
+    Vec2 getPoint() override;
 
     float getRadius();
 
-    bool canDestroy();
 
 private:
     Vec2 pc;
     float rc;
-
-    bool isKiller;  // If the collider can destroy the particles
 };
 
 #endif // SPHERECOLLIDER_H
