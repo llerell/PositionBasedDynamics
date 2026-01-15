@@ -24,6 +24,7 @@ public:
 
     void drawCollider(QPainter *painter, PlanCollider plancollider);
     void drawCollider(QPainter *painter, SphereCollider spherCollider);
+    void drawCollider(QPainter *painter, BoxCollider boxCollider);
 
     void mouseDoubleClickEvent(QMouseEvent *event) override;
 

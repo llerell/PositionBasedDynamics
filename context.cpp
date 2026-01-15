@@ -1,23 +1,27 @@
 #include "context.h"
-#include "plancollider.h"
-#include "spherecollider.h"
 
 
 Context::Context() {
     this->collisions = false;
     this->particles = std::vector<Particle>();
-    this->colliders = std::vector<std::variant<PlanCollider,SphereCollider>>();
+    this->colliders = std::vector<std::variant<PlanCollider,SphereCollider, BoxCollider>>();
     this->staticConstraints = std::vector<StaticConstraint>();
     this->dynamicConstraints = std::vector<DynamicConstraint>();
 
-    // Colliders
-    PlanCollider groundCollider = PlanCollider(Vec2(0.0,1.0), Vec2(0.0,1.0));
+    // Wall colliders
+    PlanCollider groundCollider = PlanCollider(Vec2(0.0,0.0), Vec2(0.0,1.0));
     PlanCollider leftWall = PlanCollider(Vec2(0,0), Vec2(1,0));
     PlanCollider rightWall = PlanCollider(Vec2(15,0), Vec2(-1, 0));
+
     this->colliders.push_back(groundCollider);
     this->colliders.push_back(leftWall);
     this->colliders.push_back(rightWall);
-  
+
+    // Rectangular box
+    BoxCollider box = BoxCollider(Vec2(7,3), Vec2(0,1), 2, 7);
+    this->colliders.push_back(box);
+
+    // Static sphere
     SphereCollider sphereCollider = SphereCollider(Vec2(2,3), 1.0, true, false);
     this->colliders.push_back(sphereCollider);
 
@@ -27,7 +31,6 @@ Context::Context() {
 
 Vec2 solve(StaticConstraint sc)
 {
-
     Vec2 qc = sc.part_ptr->getExpPos() - (((sc.part_ptr->getExpPos() - sc.pc).dotProduct(sc.nc))*sc.nc);
     Vec2 diff = sc.part_ptr->getExpPos() - qc;
     float C = diff.dotProduct(sc.nc) - sc.part_ptr->getRad();
@@ -47,7 +50,7 @@ std::vector<Particle>& Context::getParticles() {
     return particles;
 }
 
-std::vector<std::variant<PlanCollider,SphereCollider>>& Context::getColliders() {
+std::vector<std::variant<PlanCollider,SphereCollider, BoxCollider>>& Context::getColliders() {
     return colliders;
 }
 
@@ -82,11 +85,12 @@ void Context::updatePhysicalSystem(float dt) {
     addStaticContactConstraints();
     addDynamicContactConstraints(dt);
     projectConstraints();
+    deleteContactConstraints();
+
 
     destroyParticles();     // Destructions of the particles after too many dynamic collisions
 
     updateVelocityAndPosition(dt);
-    deleteContactConstraints();
 }
 
 void Context::applyExternalForce(float dt) {
@@ -127,7 +131,7 @@ void Context::addStaticContactConstraints() {
         for(int j=0; j<particles.size(); j++) {
 
             // variants and visitors as an alternative to inheritance
-            using colliderVariant = std::variant<PlanCollider, SphereCollider>;
+            using colliderVariant = std::variant<PlanCollider, SphereCollider, BoxCollider>;
             colliderVariant coll_var = colliders[i];
             auto sc = std::visit([j, this](auto arg)->std::optional<StaticConstraint>{return arg.checkContact(this->particles[j]);}, coll_var);
 
@@ -146,7 +150,6 @@ void Context::addStaticContactConstraints() {
 }
 
 void Context::addDynamicContactConstraints(float dt) {
-    dynamicConstraints.clear();
     for(int i=0; i<particles.size(); i++) {
         for(int j=i+1; j<particles.size(); j++) {
             std::optional<DynamicConstraint> dc = checkDynamicContact(particles[i], particles[j]);
@@ -193,6 +196,7 @@ void Context::applyFriction(float dt) {
 
 void Context::deleteContactConstraints() {
     staticConstraints.clear();
+    dynamicConstraints.clear();
 }
 
 // Destroys the particles after too many collisions
