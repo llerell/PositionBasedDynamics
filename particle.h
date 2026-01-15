@@ -6,7 +6,7 @@
 class Particle
 {
 public:
-    Particle(Vec2 pos, Vec2 velocity, float rad, float mass, QColor color_);
+    Particle(Vec2 pos, Vec2 velocity, float rad, float mass, int health, QColor color_);
 
     Particle();
 
@@ -62,7 +62,7 @@ private:
     // Destruction after too many dynamic collisions
     int nbCollisions;
 
-    int maxCollisions = 50;
+    int maxCollisions;
 };
 
 #endif // PARTICLE_H

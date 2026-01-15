@@ -9,6 +9,7 @@
 
 #include <QMainWindow>
 #include <qcheckbox.h>
+#include <qspinbox.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -31,6 +32,7 @@ private:
     QCheckBox *random_colors;
     QCheckBox *active_collisions;
     QLabel *label;
+    QSpinBox *health_number;
     DrawArea *draw_area;
     int nb_milliseconds;
 };

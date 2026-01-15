@@ -12,6 +12,7 @@ DrawArea::DrawArea(QWidget *parent)
     context = Context();
     std::srand(std::time({}));
     is_random = false;
+    healthPoints = 50;
 }
 
 void DrawArea::paintEvent(QPaintEvent *event)  {
@@ -121,7 +122,7 @@ void DrawArea::mouseDoubleClickEvent(QMouseEvent *event) {
         color = defaultPartColor;
     }
 
-    Particle particle = Particle(worldPos, Vec2(), 0.5, 1, color);
+    Particle particle = Particle(worldPos, Vec2(), 0.5, 1, healthPoints, color);
     context.addParticle(particle);
     this->update();
 }
@@ -142,4 +143,8 @@ void DrawArea::randomColor() {
 
 void DrawArea::activeCollisions() {
     context.changeCollisions();
+}
+
+void DrawArea::setHealth(int newHealth) {
+    healthPoints = newHealth;
 }

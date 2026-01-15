@@ -35,6 +35,8 @@ public:
 
     void activeCollisions();
 
+    void setHealth(int newHealth);
+
 
 private:
     Vec2 worldToView(Vec2 world_pos);
@@ -48,6 +50,8 @@ private:
     float m_width = 15;
 
     bool is_random;
+
+    int healthPoints;
 
     QColor defaultColliderColor = Qt::black;
     QColor defaultPartColor = Qt::gray;
