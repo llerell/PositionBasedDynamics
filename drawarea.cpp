@@ -48,7 +48,7 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
     painter->setBrush(QBrush(colliderColor));
     std::vector<Particle> particles = context.getParticles();
     for(int i=0; i<context.getColliders().size(); i++) {
-        std::variant<PlanCollider, SphereCollider> coll_var = context.getColliders()[i];
+        std::variant<PlanCollider, SphereCollider, BoxCollider> coll_var = context.getColliders()[i];
         std::visit([painter, this](auto& arg) {drawCollider(painter, arg);}, coll_var);
     }
 
@@ -93,6 +93,26 @@ void DrawArea::drawCollider(QPainter *painter, SphereCollider sphereCollider) {
     painter->drawEllipse(target);
 }
 
+void DrawArea::drawCollider(QPainter *painter, BoxCollider boxCollider) {
+    Vec2 u = boxCollider.getU();
+    Vec2 v = boxCollider.getV();
+    float width = boxCollider.getWidth();
+    float height = boxCollider.getHeight();
+    Vec2 p1 = worldToView(boxCollider.getCenter() + (width/2 * u) + (height/2 * v));
+    Vec2 p2 = worldToView(boxCollider.getCenter() + (width/2 * u) - (height/2 * v));
+    Vec2 p3 = worldToView(boxCollider.getCenter() - (width/2 * u) + (height/2 * v));
+    Vec2 p4 = worldToView(boxCollider.getCenter() - (width/2 * u) - (height/2 * v));
+
+    QList<QPoint> points;
+    points.append(QPoint(p1.getX(), p1.getY()));
+    points.append(QPoint(p2.getX(), p2.getY()));
+    points.append(QPoint(p4.getX(), p4.getY()));
+    points.append(QPoint(p3.getX(), p3.getY()));
+    points.append(QPoint(p1.getX(), p1.getY()));
+    QPolygon polygon = QPolygon(points);
+    painter->drawPolygon(polygon);
+}
+
 // Takes the mouse position when there is a double click
 // Then calls the paintEvent method (with update)
 void DrawArea::mouseDoubleClickEvent(QMouseEvent *event) {
@@ -110,7 +130,11 @@ void DrawArea::mouseDoubleClickEvent(QMouseEvent *event) {
 }
 
 void DrawArea::animate() {
-    context.updatePhysicalSystem(0.02);
+    float dt = 0.01;
+    float n = 10;
+    for (int i=0; i<n; i++){
+        context.updatePhysicalSystem(dt/n);
+    }
     this->update();
 }
 

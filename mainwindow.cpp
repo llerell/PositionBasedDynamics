@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     reset_button = new QPushButton("Reset");
 
-    nb_milliseconds = 5;
+    nb_milliseconds = 10;
 
     QVBoxLayout *layout = new QVBoxLayout(ui->centralwidget); // constructor’s parameter is the widget that will use the layout
 
