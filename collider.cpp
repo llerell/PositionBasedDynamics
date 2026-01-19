@@ -7,7 +7,7 @@ QColor healerCol = Qt::green;
 
 Collider::Collider() : role(0), color(neutralCol) {}
 
-Collider::Collider(int role_) : role(role_) {
+Collider::Collider(const int role_) : role(role_) {
     switch(role) {
     case 1:
         color = killerCol;

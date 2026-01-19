@@ -21,8 +21,6 @@ MainWindow::MainWindow(QWidget *parent)
     health_number = new QSpinBox();
     health_number->setMaximum(1000);
 
-    nb_milliseconds = 10;
-
     QVBoxLayout *layout = new QVBoxLayout(ui->centralwidget); // constructor’s parameter is the widget that will use the layout
 
     layout->addWidget(draw_area);

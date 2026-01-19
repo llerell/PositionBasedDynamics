@@ -5,18 +5,18 @@ BoxCollider::BoxCollider(const Vec2 pc_, const Vec2 u_, const float width_, cons
 BoxCollider::BoxCollider(const Vec2 pc_, const Vec2 u_, const float width_, const float height_, const int role_):Collider(role_), pc(pc_), u(u_*(1.0/(u_.length()))), width(width_), height(height_), v(Vec2(-u.getY(), u.getX())) {}
 
 
-std::optional<StaticConstraint> BoxCollider::checkContact(Particle& collider) {
-    Vec2 diff = collider.getExpPos()-this->getPoint();
-    Vec2 u = this->getU();
-    Vec2 v = this->getV();
-    float height = this->getHeight();
-    float width = this->getWidth();
+const std::optional<StaticConstraint> BoxCollider::checkContact(Particle& collider) {
+    const Vec2 diff = collider.getExpPos()-this->getPoint();
+    const Vec2 u = this->getU();
+    const Vec2 v = this->getV();
+    const float height = this->getHeight();
+    const float width = this->getWidth();
 
     // côtés (hors coins)
 
     // (x,y) écriture de la position de la particule dans le repère (u,v) centré en P
-    float x = u.dotProduct(diff);
-    float y = v.dotProduct(diff);
+    const float x = u.dotProduct(diff);
+    const float y = v.dotProduct(diff);
     if ((x > 0)&&(x < collider.getRad()+width/2.0)  &&  (y>-height/2.0) && (y<height/2.0)){
         StaticConstraint sc;
         sc.nc = u;
@@ -49,12 +49,12 @@ std::optional<StaticConstraint> BoxCollider::checkContact(Particle& collider) {
     // coins : contraintes linéarisées originant de chaque coin
     // les autres vérifications ont été réalisées précédemment, pas besoin d'ajouter ces conditions
 
-    Vec2 p1 = this->getPoint()+(width/2)*u+(height/2)*v;
-    Vec2 p2 = this->getPoint()-(width/2)*u+(height/2)*v;
-    Vec2 p3 = this->getPoint()-(width/2)*u-(height/2)*v;
-    Vec2 p4 = this->getPoint()+(width/2)*u-(height/2)*v;
+    const Vec2 p1 = this->getPoint()+(width/2)*u+(height/2)*v;
+    const Vec2 p2 = this->getPoint()-(width/2)*u+(height/2)*v;
+    const Vec2 p3 = this->getPoint()-(width/2)*u-(height/2)*v;
+    const Vec2 p4 = this->getPoint()+(width/2)*u-(height/2)*v;
 
-    Vec2 p[4] = {p1,p2,p3,p4};
+    const Vec2 p[4] = {p1,p2,p3,p4};
 
     for (int i=0; i<4; i++){
         if((p[i]-collider.getExpPos()).length()<collider.getRad()){
