@@ -14,6 +14,7 @@ class BoxCollider : public Collider
 public:
     /**
      * @brief BoxCollider Constructor for BoxCollider class
+     * default role is 0 (neutral collider)
      * @param pc_ position of the center of the rectangle
      * @param u_ characteristic vector, normal to the height of the rectangle.
      * @param width_
@@ -21,7 +22,15 @@ public:
      */
     BoxCollider(const Vec2 pc_, const Vec2 u_, const float width_, const float height_);
 
-    BoxCollider(const Vec2 pc_, const Vec2 u_, const float width_, const float height_, const bool isKiller_, const bool isHealer_);
+    /**
+     * @brief BoxCollider Constructor for BoxCollider class
+     * @param pc_ position of the center of the rectangle
+     * @param u_ characteristic vector, normal to the height of the rectangle.
+     * @param width_
+     * @param height_
+     * @param role_ whether the collider can destroy or heal the particles
+     */
+    BoxCollider(const Vec2 pc_, const Vec2 u_, const float width_, const float height_, const int role_);
 
     /// Destructor for BoxCollider class.
     ~BoxCollider() override = default;
@@ -31,7 +40,7 @@ public:
      * @param collider Particle to check
      * @return StaticConstraint corresponding to the box and the particle if in contact.
      */
-    std::optional<StaticConstraint> checkContact(Particle &collider) override;
+    const std::optional<StaticConstraint> checkContact(Particle &collider) override;
 
     const Vec2 getPoint() const override;
 
@@ -44,11 +53,9 @@ public:
     const float getHeight() const;
 
 private:
-    Vec2 u, v, pc;
+    const Vec2 u, v, pc;
 
-    float width, height;
-
-    bool isKiller;
+    const float width, height;
 };
 
 #endif // BOXCOLLIDER_H

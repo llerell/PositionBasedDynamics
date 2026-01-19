@@ -19,11 +19,11 @@ struct StaticConstraint
 
 inline void StaticConstraint::enforceStaticConstraint()
 {
-    Vec2 p = this->part_ptr->getExpPos();
-    Vec2 qc = p - (((p - this->pc).dotProduct(this->nc))*this->nc);
-    Vec2 diff = p - qc;
-    float C = diff.dotProduct(this->nc) - this->part_ptr->getRad();
-    Vec2 delta = - C * this->nc;
+    const Vec2 p = this->part_ptr->getExpPos();
+    const Vec2 qc = p - (((p - this->pc).dotProduct(this->nc))*this->nc);
+    const Vec2 diff = p - qc;
+    const float C = diff.dotProduct(this->nc) - this->part_ptr->getRad();
+    const Vec2 delta = - C * this->nc;
     part_ptr->setExpPos(p+delta);
 }
 

@@ -13,20 +13,20 @@ class SphereCollider : public Collider
 {
 public:
     /**
-     * SphereCollider Constructor for SphereCollider class with params pc_ and rc_.
-     *
+     * @brief SphereCollider Constructor for BoxCollider class.
+     * default role is 0 (neutral collider)
      * @param pc_ Vec2 position of the center of the disc
      * @param rc_ radius
      */
-    SphereCollider(Vec2 pc_, float rc_);
+    SphereCollider(const Vec2 pc_, const float rc_);
 
     /**
-     * SphereCollider Constructor for SphereCollider class with params pc_, rc_, isKiller_.
+     * SphereCollider Constructor for SphereCollider class.
      * @param pc_ Vec2  position of the center of the disc
      * @param rc_ float radius
-     * @param isKiller_ boolean representing whether the sphere deals damage to particles.
+     * @param role_ whether the sphere can destroy or heal the particles
      */
-    SphereCollider(Vec2 pc_, float rc_, bool isKiller_, bool isHealer_);
+    SphereCollider(const Vec2 pc_, const float rc_, const int role_);
 
 
     /// Destructor for SphereCollider class.
@@ -37,7 +37,7 @@ public:
      * @param collider Particle to check position with
      * @return StaticConstraint corresponding to the sphere and the particle if in contact.
      */
-    std::optional<StaticConstraint> checkContact(Particle& collider) override;
+    const std::optional<StaticConstraint> checkContact(Particle& collider) override;
 
     const Vec2 getPoint() const override;
 
@@ -45,11 +45,8 @@ public:
 
 
 private:
-    Vec2 pc;
-
-    float rc;
-
-    bool isKiller;
+    const Vec2 pc;    // Position of the center of the disc
+    const float rc;   // Radius
 };
 
 #endif // SPHERECOLLIDER_H
