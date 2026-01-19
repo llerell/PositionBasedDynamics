@@ -15,6 +15,11 @@ MainWindow::MainWindow(QWidget *parent)
     draw_area = new DrawArea();
 
     reset_button = new QPushButton("Reset");
+    random_colors = new QCheckBox("Random colors");
+    active_collisions = new QCheckBox("Active health points");
+    label = new QLabel("Number of health points:");
+    health_number = new QSpinBox();
+    health_number->setMaximum(1000);
 
     nb_milliseconds = 10;
 
@@ -22,9 +27,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     layout->addWidget(draw_area);
     layout->addWidget(reset_button);
+    layout->addWidget(random_colors);
+    layout->addWidget(active_collisions);
+    layout->addWidget(label);
+    layout->addWidget(health_number);
 
     QObject::connect(reset_button, &QPushButton::clicked, draw_area, &DrawArea::reset);
-
+    QObject::connect(random_colors, &QCheckBox::checkStateChanged, draw_area, &DrawArea::randomColor);
+    QObject::connect(active_collisions, &QCheckBox::checkStateChanged, draw_area, &DrawArea::activeCollisions);
+    QObject::connect(health_number, &QSpinBox::valueChanged, [this] (int result) {draw_area->setHealth(result);});
 
     // Animate: Timer
     auto timer = new QTimer();

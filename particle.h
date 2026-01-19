@@ -6,7 +6,7 @@
 class Particle
 {
 public:
-    Particle(Vec2 pos, Vec2 velocity, float rad, float mass, QColor color_);
+    Particle(Vec2 pos, Vec2 velocity, float rad, float mass, int health, QColor color_);
 
     Particle();
 
@@ -35,6 +35,12 @@ public:
     /// Add collision to the counter. Particles will get destroyed if the corresponding parameter is activated.
     void addCollision();
 
+    /// Remove collision from the counter.
+    void removeCollision();
+
+    void updateColor();
+
+
     /**
      * @brief check number of collisions suffered by the particle compared to lifetime.
      * @return bool: whether the particles has suffered more collisions than maximum.
@@ -53,12 +59,16 @@ private:
 
     float mass;
 
+    QColor initColor = QColor(200,200,200);
+
+    QColor destrColor = QColor(255,0,0);
+
     QColor color;
 
     // Destruction after too many dynamic collisions
     int nbCollisions;
 
-    int maxCollisions = 50;
+    int maxCollisions;
 };
 
 #endif // PARTICLE_H

@@ -11,6 +11,8 @@ DrawArea::DrawArea(QWidget *parent)
     this->setFixedSize(QSize(height*ratio,height));
     context = Context();
     std::srand(std::time({}));
+    is_random = false;
+    healthPoints = nbUpdates*50;
 }
 
 void DrawArea::paintEvent(QPaintEvent *event)  {
@@ -43,12 +45,21 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
     //int width = this->width();
 
     painter->fillRect(event->rect(), QBrush(Qt::white));
-
-    painter->setPen(colliderColor);
-    painter->setBrush(QBrush(colliderColor));
     std::vector<Particle> particles = context.getParticles();
+
+    QColor colliderColor;
     for(int i=0; i<context.getColliders().size(); i++) {
+
         std::variant<PlaneCollider, SphereCollider, BoxCollider> coll_var = context.getColliders()[i];
+        if(context.getCollisions()) {
+            colliderColor = std::visit([this](auto& arg) -> QColor {return arg.getColor();}, coll_var);
+        }
+        else {
+            colliderColor = defaultColliderColor;
+        }
+        painter->setPen(colliderColor);
+        painter->setBrush(QBrush(colliderColor));
+
         std::visit([painter, this](auto& arg) {drawCollider(painter, arg);}, coll_var);
     }
 
@@ -68,8 +79,9 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
     }
 }
 
+
 void DrawArea::drawCollider(QPainter *painter, PlaneCollider PlaneCollider) {
-    Vec2 pc = PlaneCollider.getCenter();
+    Vec2 pc = PlaneCollider.getPoint();
     Vec2 nc = PlaneCollider.getNormal();
     Vec2 p1, p2;
 
@@ -87,7 +99,7 @@ void DrawArea::drawCollider(QPainter *painter, PlaneCollider PlaneCollider) {
 }
 
 void DrawArea::drawCollider(QPainter *painter, SphereCollider sphereCollider) {
-    Vec2 pc = worldToView(sphereCollider.getCenter());
+    Vec2 pc = worldToView(sphereCollider.getPoint());
     float rc = this->height() * sphereCollider.getRadius()/m_height;
     QRectF target(pc.getX()-rc, pc.getY()-rc, 2*rc, 2*rc);
     painter->drawEllipse(target);
@@ -98,10 +110,10 @@ void DrawArea::drawCollider(QPainter *painter, BoxCollider boxCollider) {
     Vec2 v = boxCollider.getV();
     float width = boxCollider.getWidth();
     float height = boxCollider.getHeight();
-    Vec2 p1 = worldToView(boxCollider.getCenter() + (width/2 * u) + (height/2 * v));
-    Vec2 p2 = worldToView(boxCollider.getCenter() + (width/2 * u) - (height/2 * v));
-    Vec2 p3 = worldToView(boxCollider.getCenter() - (width/2 * u) + (height/2 * v));
-    Vec2 p4 = worldToView(boxCollider.getCenter() - (width/2 * u) - (height/2 * v));
+    Vec2 p1 = worldToView(boxCollider.getPoint() + (width/2 * u) + (height/2 * v));
+    Vec2 p2 = worldToView(boxCollider.getPoint() + (width/2 * u) - (height/2 * v));
+    Vec2 p3 = worldToView(boxCollider.getPoint() - (width/2 * u) + (height/2 * v));
+    Vec2 p4 = worldToView(boxCollider.getPoint() - (width/2 * u) - (height/2 * v));
 
     QList<QPoint> points;
     points.append(QPoint(p1.getX(), p1.getY()));
@@ -119,19 +131,27 @@ void DrawArea::mouseDoubleClickEvent(QMouseEvent *event) {
     QPointF position = event->position();
     Vec2 viewPos = Vec2(position.x(), position.y());
     Vec2 worldPos = viewToWorld(viewPos);
+    QColor color;
 
-    // Random color
-    int rd = std::rand() % partColors.size();
-    QColor color = partColors[rd];
+    if(is_random) {
+        // Random color: int between 0 and 254 to avoid white (which would not be seen)
+        int red = std::rand() % 255;
+        int green = std::rand() % 255;
+        int blue = std::rand() % 255;
+        color = QColor(red,green,blue);
+    }
+    else {
+        color = defaultPartColor;
+    }
 
-    Particle particle = Particle(worldPos, Vec2(), 0.5, 1, color);
+    Particle particle = Particle(worldPos, Vec2(), 0.5, 1, healthPoints, color);
     context.addParticle(particle);
     this->update();
 }
 
 void DrawArea::animate() {
     float dt = 0.01;
-    float n = 10;
+    float n = float(nbUpdates);
     for (int i=0; i<n; i++){
         context.updatePhysicalSystem(dt/n);
     }
@@ -141,4 +161,16 @@ void DrawArea::animate() {
 void DrawArea::reset() {
     context.reset();
     this->update();
+}
+
+void DrawArea::randomColor() {
+    is_random = !(is_random);
+}
+
+void DrawArea::activeCollisions() {
+    context.changeCollisions();
+}
+
+void DrawArea::setHealth(int newHealth) {
+    healthPoints = nbUpdates*newHealth;
 }

@@ -31,7 +31,7 @@ public:
      */
     std::optional<StaticConstraint> checkContact(Particle& collider) override;
 
-    Vec2 getCenter() override;
+    Vec2 getPoint() override;
 
     Vec2 getU();
 

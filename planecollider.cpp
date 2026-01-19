@@ -3,22 +3,21 @@
 
 
 PlaneCollider::PlaneCollider(Vec2 pc_, Vec2 nc_)
-    : Collider(), pc(pc_), nc((1.0/nc_.length())*nc_), isKiller(false) {
+    : Collider(), pc(pc_), nc((1.0/nc_.length())*nc_) {
 }
 
 
-PlaneCollider::PlaneCollider(Vec2 pc_, Vec2 nc_, bool isKiller_)
-    : Collider(), pc(pc_), nc((1.0/nc_.length())*nc_), isKiller(isKiller_) {
-}
+PlaneCollider::PlaneCollider(Vec2 pc_, Vec2 nc_, bool isKiller_, bool isHealer_)
+    : Collider(isKiller_, isHealer_), pc(pc_), nc((1.0/nc_.length())*nc_) {}
 
 std::optional<StaticConstraint> PlaneCollider::checkContact(Particle& collider) {
     Vec2 expPos = collider.getExpPos();
-    Vec2 diff = expPos - getCenter();
+    Vec2 diff = expPos - getPoint();
     float ri = collider.getRad();
 
     if(diff.dotProduct(getNormal()) - ri < 0.0) {
         StaticConstraint sc;
-        sc.pc = getCenter();
+        sc.pc = getPoint();
         sc.nc = getNormal();
         sc.part_ptr = &collider;
         return sc;
@@ -26,7 +25,8 @@ std::optional<StaticConstraint> PlaneCollider::checkContact(Particle& collider) 
     return {};
 }
 
-Vec2 PlaneCollider::getCenter() {
+
+Vec2 PlaneCollider::getPoint() {
     return pc;
 }
 

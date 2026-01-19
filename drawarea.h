@@ -40,6 +40,12 @@ public:
     /// reset context.
     void reset();
 
+    void randomColor();
+
+    void activeCollisions();
+
+    void setHealth(int newHealth);
+
 
 private:
     /// translate physical system coordinates in pixel coordinates.
@@ -54,8 +60,14 @@ private:
 
     float m_width = 15;
 
-    QColor colliderColor = Qt::black;
-    std::vector<QColor> partColors = {Qt::darkRed, Qt::darkGreen, Qt::darkBlue, QColor(230,200,0), Qt::gray, QColor(0,114,114), QColor(200,120,0), QColor(120,0,200)};
+    bool is_random;
+
+    int healthPoints;
+
+    int nbUpdates = 10;
+
+    QColor defaultColliderColor = Qt::black;
+    QColor defaultPartColor = Qt::gray;
 
 };
 

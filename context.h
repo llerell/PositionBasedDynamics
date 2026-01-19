@@ -51,11 +51,15 @@ public:
     /// Reset the context (remove all particles).
     void reset();
 
+    bool getCollisions();
+    void changeCollisions();
+
 private:
     std::vector<Particle> particles;
     std::vector<std::variant<PlaneCollider,SphereCollider, BoxCollider>> colliders;
     std::vector<StaticConstraint> staticConstraints;
     std::vector<DynamicConstraint> dynamicConstraints;
+    bool collisions;
 
     /// Sets velocity of each particle according to external forces implemented herein.
     void applyExternalForce(float dt);

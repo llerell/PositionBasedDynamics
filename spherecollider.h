@@ -26,7 +26,8 @@ public:
      * @param rc_ float radius
      * @param isKiller_ boolean representing whether the sphere deals damage to particles.
      */
-    SphereCollider(Vec2 pc_, float rc_, bool isKiller_);
+    SphereCollider(Vec2 pc_, float rc_, bool isKiller_, bool isHealer_);
+
 
     /// Destructor for SphereCollider class.
     ~SphereCollider() override = default;
@@ -38,14 +39,14 @@ public:
      */
     std::optional<StaticConstraint> checkContact(Particle& collider) override;
 
-    Vec2 getCenter() override;
+    Vec2 getPoint() override;
 
     float getRadius();
 
-    bool canDestroy();
 
 private:
     Vec2 pc;
+
     float rc;
 
     bool isKiller;

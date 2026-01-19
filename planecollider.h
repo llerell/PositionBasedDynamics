@@ -25,7 +25,7 @@ public:
     * @param nc_ 2-Dimensional Normal Vector to the plane.
     * @param isKiller_
     */
-    PlaneCollider(Vec2 pc_, Vec2 nc_, bool isKiller_);
+    PlaneCollider(Vec2 pc_, Vec2 nc_, bool isKiller_, bool isHealer_);
 
     /// Destructor for PlaneCollider class.
     ~PlaneCollider() override {}
@@ -38,7 +38,7 @@ public:
      */
     std::optional<StaticConstraint> checkContact(Particle& collider) override;
 
-    Vec2 getCenter() override;
+    Vec2 getPoint() override;
 
     Vec2 getNormal();
 

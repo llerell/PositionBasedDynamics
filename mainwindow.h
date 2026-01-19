@@ -8,6 +8,8 @@
 #include "drawarea.h"
 
 #include <QMainWindow>
+#include <qcheckbox.h>
+#include <qspinbox.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -27,7 +29,10 @@ public:
 private:
     Ui::MainWindow *ui; // Classe générée automatiquement à partir d’un fichier .ui décrivant le contenu de l’interface graphique
     QPushButton *reset_button;
+    QCheckBox *random_colors;
+    QCheckBox *active_collisions;
     QLabel *label;
+    QSpinBox *health_number;
     DrawArea *draw_area;
     int nb_milliseconds;
 };
