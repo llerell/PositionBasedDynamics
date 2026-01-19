@@ -6,44 +6,48 @@ BoxCollider::BoxCollider(const Vec2 pc_, const Vec2 u_, const float width_, cons
 
 
 std::optional<StaticConstraint> BoxCollider::checkContact(Particle& collider) {
-    Vec2 diff = collider.getExpPos()-this->getPoint();
-    Vec2 u = this->getU();
-    Vec2 v = this->getV();
-    float height = this->getHeight();
-    float width = this->getWidth();
+    const Vec2 diff = collider.getExpPos()-this->getPoint();
+    const Vec2 u = this->getU();
+    const Vec2 v = this->getV();
+    const float height = this->getHeight();
+    const float width = this->getWidth();
 
     // côtés (hors coins)
 
     // (x,y) écriture de la position de la particule dans le repère (u,v) centré en P
-    float x = u.dotProduct(diff);
-    float y = v.dotProduct(diff);
-    if ((x > 0)&&(x < collider.getRad()+width/2.0)  &&  (y>-height/2.0) && (y<height/2.0)){
-        StaticConstraint sc;
-        sc.nc = u;
-        sc.pc = this->getPoint() + (width/2.0)*u;
-        sc.part_ptr= &collider;
-        return sc;
+    const float x = u.dotProduct(diff);
+    const float y = v.dotProduct(diff);
+    if ((y>-height/2.0) && (y<height/2.0)){
+        if ((x > 0)&&(x < collider.getRad()+width/2.0)){
+            StaticConstraint sc;
+            sc.nc = u;
+            sc.pc = this->getPoint() + (width/2.0)*u;
+            sc.part_ptr= &collider;
+            return sc;
 
-    } else if ((x<0) && (x > -collider.getRad()-width/2.0)&&  (y>-height/2.0) && (y<height/2.0)){
-        StaticConstraint sc;
-        sc.nc = -1*u;
-        sc.pc = this->getPoint() - (width/2.0)*u;
-        sc.part_ptr=&collider;
-        return sc;
+        } else if ((x<0) && (x > -collider.getRad()-width/2.0)){
+            StaticConstraint sc;
+            sc.nc = -1*u;
+            sc.pc = this->getPoint() - (width/2.0)*u;
+            sc.part_ptr=&collider;
+            return sc;
+        }
     }
-    if ((y > 0)&&(y < collider.getRad()+height/2.0) &&  (x>-width/2.0) && (x<width/2.0)){
-        StaticConstraint sc;
-        sc.nc = v;
-        sc.pc = this->getPoint() + (height/2.0)*v;
-        sc.part_ptr=&collider;
-        return sc;
+    if ((x>-width/2.0) && (x<width/2.0)){
+        if ((y > 0)&&(y < collider.getRad()+height/2.0) ){
+            StaticConstraint sc;
+            sc.nc = v;
+            sc.pc = this->getPoint() + (height/2.0)*v;
+            sc.part_ptr = &collider;
+            return sc;
 
-    } else if (( y <0) && (y > -collider.getRad()-height/2.0)&&  (x>-width/2.0) && (x<width/2.0)){
-        StaticConstraint sc;
-        sc.nc = -1*v;
-        sc.pc = this->getPoint() - (height/2.0)*v;
-        sc.part_ptr=&collider;
-        return sc;
+        } else if (( y <0) && (y > -collider.getRad()-height/2.0)){
+            StaticConstraint sc;
+            sc.nc = -1*v;
+            sc.pc = this->getPoint() - (height/2.0)*v;
+            sc.part_ptr=&collider;
+            return sc;
+        }
     }
 
     // coins : contraintes linéarisées originant de chaque coin
