@@ -34,15 +34,15 @@ void Context::addParticle(Particle particle) {
     this->particles.push_back(particle);
 }
 
-int Context::getNbParticles() {
+const int Context::getNbParticles() const {
     return particles.size();
 }
 
-std::vector<Particle>& Context::getParticles() {
+const std::vector<Particle>& Context::getParticles() const {
     return particles;
 }
 
-std::vector<std::variant<PlaneCollider,SphereCollider, BoxCollider>>& Context::getColliders() {
+const auto Context::getColliders() const -> std::vector<std::variant<PlaneCollider, SphereCollider, BoxCollider>>{
     return colliders;
 }
 
@@ -79,9 +79,6 @@ void Context::updatePhysicalSystem(float dt) {
     projectConstraints();
     deleteContactConstraints();
 
-    /**
-     * @brief destroy particles after a certain number of collisions
-     */
     destroyParticles();
     updateVelocityAndPosition(dt);
 }
@@ -191,17 +188,17 @@ void Context::deleteContactConstraints() {
     dynamicConstraints.clear();
 }
 
-// Destroys the particles after too many collisions
+/// Destroy the particles after too many collisions
 void Context::destroyParticles() {
-    particles.erase(std::remove_if(particles.begin(),particles.end(), [](Particle part) { return part.checkNbCollisions(); }), particles.end());
+    particles.erase(std::remove_if(particles.begin(),particles.end(), [](Particle part) { return part.checkNbCollisions() }), particles.end());
 }
 
-// Reset the context (remove all particles)
+/// Reset the context (remove all particles)
 void Context::reset() {
     particles.clear();
 }
 
-bool Context::getCollisions() {
+const bool Context::getCollisionsToggle() const {
     return collisions;
 }
 

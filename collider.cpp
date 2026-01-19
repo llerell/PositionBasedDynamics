@@ -24,14 +24,14 @@ Collider::Collider(bool isKiller_, bool isHealer_) : isKiller(isKiller_), isHeal
     }
 }
 
-bool Collider::canDestroy() {
+const bool Collider::canDestroy() const {
     return isKiller;
 }
 
-bool Collider::canHeal() {
+const bool Collider::canHeal() const {
     return isHealer;
 }
 
-QColor Collider::getColor() {
+const QColor Collider::getColor() const {
     return color;
 }

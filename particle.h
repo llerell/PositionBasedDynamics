@@ -10,11 +10,11 @@ public:
 
     Particle();
 
-    const Vec2 getPos();
+    const Vec2 getPos() const ;
 
     void setPos(Vec2 newPos);
 
-    const Vec2 getVelocity();
+    const Vec2 getVelocity() const ;
 
     void setVelocity(Vec2 newVelocity);
 
@@ -22,11 +22,11 @@ public:
   
     void setExpPos(Vec2 newExpPos);
 
-    const float getX();
+    const float getX() const ;
 
-    const float getY();
+    const float getY() const ;
 
-    const float getMass();
+    const float getMass() const;
 
     const float getRad() const;
 
@@ -45,7 +45,7 @@ public:
      * @brief check number of collisions suffered by the particle compared to lifetime.
      * @return bool: whether the particles has suffered more collisions than maximum.
      */
-    bool checkNbCollisions();
+    const bool checkNbCollisions() const;
 
 
 private:

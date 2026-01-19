@@ -51,7 +51,7 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
     for(int i=0; i<context.getColliders().size(); i++) {
 
         std::variant<PlaneCollider, SphereCollider, BoxCollider> coll_var = context.getColliders()[i];
-        if(context.getCollisions()) {
+        if(context.getCollisionsToggle()) {
             colliderColor = std::visit([this](auto& arg) -> QColor {return arg.getColor();}, coll_var);
         }
         else {

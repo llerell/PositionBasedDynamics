@@ -5,7 +5,7 @@ Particle::Particle(Vec2 pos_, Vec2 vel, float rad_, float mass_, int health, QCo
 
 Particle::Particle(): pos(Vec2{0,0}), velocity(Vec2{0,0}), mass(0.0), expPos(Vec2{0,0}), maxCollisions(50), color(Qt::gray), nbCollisions(0) {}
 
-const Vec2 Particle::getPos() {
+const Vec2 Particle::getPos() const {
     return pos;
 }
 
@@ -13,7 +13,7 @@ void Particle::setPos(Vec2 newPos) {
     this->pos = newPos;
 }
 
-const Vec2 Particle::getVelocity() {
+const Vec2 Particle::getVelocity() const {
     return velocity;
 }
 
@@ -29,15 +29,15 @@ void Particle::setExpPos(Vec2 newExpPos) {
     this-> expPos = newExpPos;
 }
 
-const float Particle::getX() {
+const float Particle::getX() const {
     return pos.getX();
 }
 
-const float Particle::getY() {
+const float Particle::getY() const {
     return pos.getY();
 }
 
-const float Particle::getMass() {
+const float Particle::getMass() const {
     return mass;
 }
 
@@ -69,6 +69,6 @@ void Particle::removeCollision() {
     updateColor();
 }
 
-bool Particle::checkNbCollisions() {
+const bool Particle::checkNbCollisions() const{
     return nbCollisions > maxCollisions;
 }

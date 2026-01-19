@@ -20,19 +20,19 @@ public:
     void addParticle(Particle particle);
 
     /// get number of Particles present in the current context
-    int getNbParticles();
+    const int getNbParticles() const;
 
     /// return std::vector of all particles listed in the context.
-    std::vector<Particle>& getParticles();
+    const std::vector<Particle>& getParticles() const;
 
-    /// return std::vector of Colliders, whether Plane, Spherical, of Rectangular.
-    std::vector<std::variant<PlaneCollider, SphereCollider, BoxCollider>>& getColliders();
+    /// return std::vector of Colliders, whether Plane, Spherical, of Rectangular, using std::variant.
+    const auto getColliders() const -> std::vector<std::variant<PlaneCollider, SphereCollider, BoxCollider>>;
 
     /// return std::vector of all StaticConstraints between obstacles and particles.
-    std::vector<StaticConstraint>& getStaticConstraints();
+    std::vector<StaticConstraint>& getStaticConstraints() ;
 
     /// return std::vector of all DynamicConstraints between particles.
-    std::vector<DynamicConstraint>& getDynamicConstraints();
+    std::vector<DynamicConstraint>& getDynamicConstraints() ;
 
     /// updates all particles and their attributes for the next iteration.
     void updatePhysicalSystem(float dt);
@@ -51,7 +51,7 @@ public:
     /// Reset the context (remove all particles).
     void reset();
 
-    bool getCollisions();
+    const bool getCollisionsToggle() const ;
     void changeCollisions();
 
 private:
