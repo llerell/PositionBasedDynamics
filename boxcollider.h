@@ -21,7 +21,7 @@ public:
      */
     BoxCollider(const Vec2 pc_, const Vec2 u_, const float width_, const float height_);
 
-    BoxCollider(const Vec2 pc_, const Vec2 u_, const float width_, const float height_, const bool isKiller_, const bool isHealer_);
+    BoxCollider(const Vec2 pc_, const Vec2 u_, const float width_, const float height_, const int role_);
 
     /// Destructor for BoxCollider class.
     ~BoxCollider() override = default;
@@ -47,8 +47,6 @@ private:
     Vec2 u, v, pc;
 
     float width, height;
-
-    bool isKiller;
 };
 
 #endif // BOXCOLLIDER_H

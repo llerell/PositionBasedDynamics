@@ -22,10 +22,10 @@ Context::Context() {
     this->colliders.push_back(box);
 
     // Static sphere
-    SphereCollider sphereCollider = SphereCollider(Vec2(2,3), 1.0, true, false);
+    SphereCollider sphereCollider = SphereCollider(Vec2(2,3), 1.0, 1);
     this->colliders.push_back(sphereCollider);
 
-    SphereCollider healCollider = SphereCollider(Vec2(5,5), 1.0, false, true);
+    SphereCollider healCollider = SphereCollider(Vec2(5,5), 1.0, 2);
     this->colliders.push_back(healCollider);
 }
 
@@ -42,7 +42,11 @@ const std::vector<Particle>& Context::getParticles() const {
     return particles;
 }
 
-const auto Context::getColliders() const -> std::vector<std::variant<PlaneCollider, SphereCollider, BoxCollider>>{
+/**
+ * @brief getColliders
+ * @return std::vector of Colliders, whether Plane, Spherical, of Rectangular, using std::variant.
+ */
+const std::vector<std::variant<PlaneCollider, SphereCollider, BoxCollider>> Context::getColliders() const {
     return colliders;
 }
 
@@ -125,11 +129,16 @@ void Context::addStaticContactConstraints() {
             if (sc.has_value()){
                 StaticConstraint sc_val = sc.value();
                 staticConstraints.push_back(sc_val);
-                if(collisions & std::visit([](auto arg)->bool{return arg.canDestroy();}, coll_var)) {
-                    particles[j].addCollision();
-                }
-                if(collisions & std::visit([](auto arg)->bool{return arg.canHeal();}, coll_var)) {
-                    particles[j].removeCollision();
+                if(collisions) {
+                    int role = std::visit([](auto arg)->int{return arg.getRole();}, coll_var);
+                    switch(role) {
+                    case 1:
+                        particles[j].addCollision();
+                        break;
+                    case 2:
+                        particles[j].removeCollision();
+                        break;
+                    }
                 }
             }
         }

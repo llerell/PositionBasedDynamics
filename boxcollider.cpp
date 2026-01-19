@@ -2,7 +2,7 @@
 
 BoxCollider::BoxCollider(const Vec2 pc_, const Vec2 u_, const float width_, const float height_):Collider(), pc(pc_), u(u_*(1.0/(u_.length()))), width(width_), height(height_), v(Vec2(-u.getY(), u.getX())) {}
 
-BoxCollider::BoxCollider(const Vec2 pc_, const Vec2 u_, const float width_, const float height_, const bool isKiller_, const bool isHealer_):Collider(isKiller_, isHealer_), pc(pc_), u(u_*(1.0/(u_.length()))), width(width_), height(height_), v(Vec2(-u.getY(), u.getX())) {}
+BoxCollider::BoxCollider(const Vec2 pc_, const Vec2 u_, const float width_, const float height_, const int role_):Collider(role_), pc(pc_), u(u_*(1.0/(u_.length()))), width(width_), height(height_), v(Vec2(-u.getY(), u.getX())) {}
 
 
 std::optional<StaticConstraint> BoxCollider::checkContact(Particle& collider) {

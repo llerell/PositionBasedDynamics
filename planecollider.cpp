@@ -7,8 +7,8 @@ PlaneCollider::PlaneCollider(Vec2 pc_, Vec2 nc_)
 }
 
 
-PlaneCollider::PlaneCollider(Vec2 pc_, Vec2 nc_, bool isKiller_, bool isHealer_)
-    : Collider(isKiller_, isHealer_), pc(pc_), nc((1.0/nc_.length())*nc_) {}
+PlaneCollider::PlaneCollider(Vec2 pc_, Vec2 nc_, int role_)
+    : Collider(role_), pc(pc_), nc((1.0/nc_.length())*nc_) {}
 
 std::optional<StaticConstraint> PlaneCollider::checkContact(Particle& collider) {
     Vec2 expPos = collider.getExpPos();

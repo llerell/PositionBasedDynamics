@@ -26,7 +26,7 @@ public:
      * @param rc_ float radius
      * @param isKiller_ boolean representing whether the sphere deals damage to particles.
      */
-    SphereCollider(Vec2 pc_, float rc_, bool isKiller_, bool isHealer_);
+    SphereCollider(Vec2 pc_, float rc_, int role_);
 
 
     /// Destructor for SphereCollider class.
@@ -48,8 +48,6 @@ private:
     Vec2 pc;
 
     float rc;
-
-    bool isKiller;
 };
 
 #endif // SPHERECOLLIDER_H

@@ -5,8 +5,8 @@ SphereCollider::SphereCollider(Vec2 pc_, float rc_)
 
 }
 
-SphereCollider::SphereCollider(Vec2 pc_, float rc_, bool isKiller_, bool isHealer_)
-    : Collider(isKiller_, isHealer_), pc(pc_), rc(rc_) {}
+SphereCollider::SphereCollider(Vec2 pc_, float rc_, int role_)
+    : Collider(role_), pc(pc_), rc(rc_) {}
 
 std::optional<StaticConstraint> SphereCollider::checkContact(Particle& collider) {
     Vec2 diff = collider.getExpPos()-this->getPoint();

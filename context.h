@@ -25,8 +25,11 @@ public:
     /// return std::vector of all particles listed in the context.
     const std::vector<Particle>& getParticles() const;
 
-    /// return std::vector of Colliders, whether Plane, Spherical, of Rectangular, using std::variant.
-    const auto getColliders() const -> std::vector<std::variant<PlaneCollider, SphereCollider, BoxCollider>>;
+    /**
+     * @brief getColliders
+     * @return std::vector of Colliders, whether Plane, Spherical, of Rectangular, using std::variant.
+     */
+    const std::vector<std::variant<PlaneCollider, SphereCollider, BoxCollider>> getColliders() const;
 
     /// return std::vector of all StaticConstraints between obstacles and particles.
     std::vector<StaticConstraint>& getStaticConstraints() ;

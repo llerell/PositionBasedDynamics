@@ -11,7 +11,7 @@ class Collider
 {
 public:
     Collider();
-    Collider(bool isKiller_, bool isHealer_);
+    Collider(int role_);
 
     virtual ~Collider() {}
 
@@ -25,14 +25,12 @@ public:
 
     virtual const Vec2 getPoint() const = 0;
 
-    const bool canDestroy() const;
-    const bool canHeal() const;
+    const int getRole() const;
 
     const QColor getColor() const;
 
 protected:
-    bool isKiller;  // If the collider can destroy the particles
-    bool isHealer;  // If the collider can "heal" the particles
+    const int role;   // 0 if the collider does nothing, 1 if it can destroy the particles, 2 if it can heal them
     QColor color;
 };
 

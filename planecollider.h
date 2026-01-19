@@ -25,7 +25,7 @@ public:
     * @param nc_ 2-Dimensional Normal Vector to the plane.
     * @param isKiller_
     */
-    PlaneCollider(Vec2 pc_, Vec2 nc_, bool isKiller_, bool isHealer_);
+    PlaneCollider(Vec2 pc_, Vec2 nc_, int role_);
 
     /// Destructor for PlaneCollider class.
     ~PlaneCollider() override {}
