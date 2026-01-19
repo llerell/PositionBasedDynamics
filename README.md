@@ -12,3 +12,5 @@ The vertices of the box colliders were particularly hard to modelise but we mana
 We also managed to remove and destroy the particles after too many contacts using the std::remove_if method from the standard library.
 We wanted to use inheritance for the colliders, but we had many difficulties to have a vector of colliders (that could be either Plane, Sphere or Box). We finally managed to keep this structure by using std:variant and std::visit, which works but seems to complexify the code.
 At first the movements of the particles were instable as the particles kept vibrating, but we solved this problem by repeating several times the resolution of the physical system.
+
+We started implementing links between particles to create solid objects, but it is still riddled with bugs. If you want to have a look at it, it is in the linked_particles branch. The only additional instructions are to click (once) on the two particles you want to select, then press the 'link' button under the scene. We have only started doing this today Monday 19 January, so we haven't really had the time to figure this out yet. 
