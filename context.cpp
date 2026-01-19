@@ -190,7 +190,7 @@ void Context::deleteContactConstraints() {
 
 /// Destroy the particles after too many collisions
 void Context::destroyParticles() {
-    particles.erase(std::remove_if(particles.begin(),particles.end(), [](Particle part) { return part.checkNbCollisions() }), particles.end());
+    particles.erase(std::remove_if(particles.begin(),particles.end(), [](Particle part) { return part.checkNbCollisions(); }), particles.end());
 }
 
 /// Reset the context (remove all particles)
