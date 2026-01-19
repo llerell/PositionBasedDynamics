@@ -1,14 +1,14 @@
 #include "spherecollider.h"
 
-SphereCollider::SphereCollider(Vec2 pc_, float rc_)
+SphereCollider::SphereCollider(const Vec2 pc_, const float rc_)
     : Collider(), pc(pc_), rc(rc_) {
 
 }
 
-SphereCollider::SphereCollider(Vec2 pc_, float rc_, bool isKiller_, bool isHealer_)
-    : Collider(isKiller_, isHealer_), pc(pc_), rc(rc_) {}
+SphereCollider::SphereCollider(const Vec2 pc_, const float rc_, const int role_)
+    : Collider(role_), pc(pc_), rc(rc_) {}
 
-std::optional<StaticConstraint> SphereCollider::checkContact(Particle& collider) {
+const std::optional<StaticConstraint> SphereCollider::checkContact(Particle& collider) {
     Vec2 diff = collider.getExpPos()-this->getPoint();
     float sdf = diff.length() - this->getRadius();
     if (sdf<collider.getRad()){

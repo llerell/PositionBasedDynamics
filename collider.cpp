@@ -5,31 +5,23 @@ QColor neutralCol = Qt::black;
 QColor killerCol = Qt::darkRed;
 QColor healerCol = Qt::green;
 
-Collider::Collider() : isKiller(false), isHealer(false), color(neutralCol) {}
+Collider::Collider() : role(0), color(neutralCol) {}
 
-Collider::Collider(bool isKiller_, bool isHealer_) : isKiller(isKiller_), isHealer(isHealer_) {
-    if(isKiller_) {
-        if(isHealer_) {
-            color = neutralCol;
-        }
-        else {
-            color = killerCol;
-        }
-    }
-    else if(isHealer_) {
+Collider::Collider(const int role_) : role(role_) {
+    switch(role) {
+    case 1:
+        color = killerCol;
+        break;
+    case 2:
         color = healerCol;
-    }
-    else {
+        break;
+    default:
         color = neutralCol;
     }
 }
 
-const bool Collider::canDestroy() const {
-    return isKiller;
-}
-
-const bool Collider::canHeal() const {
-    return isHealer;
+const int Collider::getRole() const {
+    return role;
 }
 
 const QColor Collider::getColor() const {
