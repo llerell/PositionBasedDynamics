@@ -21,6 +21,15 @@ public:
      */
     BoxCollider(const Vec2 pc_, const Vec2 u_, const float width_, const float height_);
 
+    /**
+     * @brief BoxCollider Constructor for BoxCollider class
+     * @param pc_ position of the center of the rectangle
+     * @param u_ characteristic vector, normal to the height of the rectangle.
+     * @param width_
+     * @param height_
+     * @param isKiller_
+     * @param isHealer_
+     */
     BoxCollider(const Vec2 pc_, const Vec2 u_, const float width_, const float height_, const bool isKiller_, const bool isHealer_);
 
     /// Destructor for BoxCollider class.

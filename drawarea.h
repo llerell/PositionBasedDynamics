@@ -42,7 +42,7 @@ public:
 
     void randomColor();
 
-    void activeCollisions();
+    void toggleCollisions();
 
     void setHealth(int newHealth);
 

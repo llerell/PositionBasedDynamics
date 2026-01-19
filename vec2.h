@@ -3,7 +3,9 @@
 #include <cmath>
 #include <iostream>
 
-
+/**
+ * @brief The Vec2 class implements 2-dimensional vectors with float coordinates.
+ */
 class Vec2 {
 public:
     Vec2(float x_, float y_);

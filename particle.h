@@ -38,6 +38,7 @@ public:
     /// Remove collision from the counter.
     void removeCollision();
 
+    /// update particle color according to damage taken.
     void updateColor();
 
 

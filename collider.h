@@ -6,11 +6,12 @@
 #include <optional>
 
 
-// Abstract class that defines colliders objects
+// Abstract class that defines collider objects
 class Collider
 {
 public:
     Collider();
+
     Collider(bool isKiller_, bool isHealer_);
 
     virtual ~Collider() {}
@@ -26,6 +27,7 @@ public:
     virtual const Vec2 getPoint() const = 0;
 
     const bool canDestroy() const;
+
     const bool canHeal() const;
 
     const QColor getColor() const;
