@@ -26,14 +26,11 @@ std::optional<StaticConstraint> PlaneCollider::checkContact(Particle& collider) 
 }
 
 
-Vec2 PlaneCollider::getPoint() {
+const Vec2 PlaneCollider::getPoint() const {
     return pc;
 }
 
-Vec2 PlaneCollider::getNormal() {
+const Vec2 PlaneCollider::getNormal() const {
     return nc;
 }
 
-bool PlaneCollider::canDestroy() {
-    return isKiller;
-}

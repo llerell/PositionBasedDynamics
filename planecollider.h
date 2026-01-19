@@ -38,16 +38,13 @@ public:
      */
     std::optional<StaticConstraint> checkContact(Particle& collider) override;
 
-    Vec2 getPoint() override;
+    const Vec2 getPoint() const override;
 
-    Vec2 getNormal();
-
-    bool canDestroy();
+    const Vec2 getNormal() const ;
 
 private:
     Vec2 pc;    // A point of the plane
     Vec2 nc;    // Normal vector
-    bool isKiller;  // If the collider can destroy the particles
 };
 
 #endif // PLANECOLLIDER_H

@@ -21,11 +21,11 @@ std::optional<StaticConstraint> SphereCollider::checkContact(Particle& collider)
     return {};
 }
 
-Vec2 SphereCollider::getPoint() {
+const Vec2 SphereCollider::getPoint() const {
     return pc;
 }
 
-float SphereCollider::getRadius() {
+const float SphereCollider::getRadius() const {
     return rc;
 }
 

@@ -19,7 +19,9 @@ public:
      * @param width_
      * @param height_
      */
-    BoxCollider(Vec2 pc_, Vec2 u_, float width_, float height_);
+    BoxCollider(const Vec2 pc_, const Vec2 u_, const float width_, const float height_);
+
+    BoxCollider(const Vec2 pc_, const Vec2 u_, const float width_, const float height_, const bool isKiller_, const bool isHealer_);
 
     /// Destructor for BoxCollider class.
     ~BoxCollider() override = default;
@@ -29,19 +31,17 @@ public:
      * @param collider Particle to check
      * @return StaticConstraint corresponding to the box and the particle if in contact.
      */
-    std::optional<StaticConstraint> checkContact(Particle& collider) override;
+    std::optional<StaticConstraint> checkContact(Particle &collider) override;
 
-    Vec2 getPoint() override;
+    const Vec2 getPoint() const override;
 
-    Vec2 getU();
+    const Vec2 getU() const;
 
-    Vec2 getV();
+    const Vec2 getV() const;
 
-    float getWidth();
+    const float getWidth() const;
 
-    float getHeight();
-
-    bool canDestroy();
+    const float getHeight() const;
 
 private:
     Vec2 u, v, pc;

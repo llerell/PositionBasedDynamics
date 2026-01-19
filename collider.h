@@ -23,12 +23,12 @@ public:
      */
     virtual auto checkContact(Particle& collider)-> std::optional<StaticConstraint> =0;
 
-    virtual Vec2 getPoint() = 0;
+    virtual const Vec2 getPoint() const = 0;
 
-    bool canDestroy();
-    bool canHeal();
+    const bool canDestroy() const;
+    const bool canHeal() const;
 
-    QColor getColor();
+    const QColor getColor() const;
 
 protected:
     bool isKiller;  // If the collider can destroy the particles

@@ -1,6 +1,8 @@
 #include "boxcollider.h"
 
-BoxCollider::BoxCollider(Vec2 pc_, Vec2 u_, float width_, float height_):Collider(), pc(pc_), u(u_*(1.0/(u_.length()))), width(width_), height(height_), v(Vec2(-u.getY(), u.getX())), isKiller(false) {}
+BoxCollider::BoxCollider(const Vec2 pc_, const Vec2 u_, const float width_, const float height_):Collider(), pc(pc_), u(u_*(1.0/(u_.length()))), width(width_), height(height_), v(Vec2(-u.getY(), u.getX())) {}
+
+BoxCollider::BoxCollider(const Vec2 pc_, const Vec2 u_, const float width_, const float height_, const bool isKiller_, const bool isHealer_):Collider(isKiller_, isHealer_), pc(pc_), u(u_*(1.0/(u_.length()))), width(width_), height(height_), v(Vec2(-u.getY(), u.getX())) {}
 
 
 std::optional<StaticConstraint> BoxCollider::checkContact(Particle& collider) {
@@ -19,7 +21,7 @@ std::optional<StaticConstraint> BoxCollider::checkContact(Particle& collider) {
         StaticConstraint sc;
         sc.nc = u;
         sc.pc = this->getPoint() + (width/2.0)*u;
-        sc.part_ptr=&collider;
+        sc.part_ptr= &collider;
         return sc;
 
     } else if ((x<0) && (x > -collider.getRad()-width/2.0)&&  (y>-height/2.0) && (y<height/2.0)){
@@ -45,7 +47,7 @@ std::optional<StaticConstraint> BoxCollider::checkContact(Particle& collider) {
     }
 
     // coins : contraintes linéarisées originant de chaque coin
-    // les autres vérifications ont été réalisées précédemment
+    // les autres vérifications ont été réalisées précédemment, pas besoin d'ajouter ces conditions
 
     Vec2 p1 = this->getPoint()+(width/2)*u+(height/2)*v;
     Vec2 p2 = this->getPoint()-(width/2)*u+(height/2)*v;
@@ -68,23 +70,21 @@ std::optional<StaticConstraint> BoxCollider::checkContact(Particle& collider) {
     return {};
 }
 
-Vec2 BoxCollider::getPoint() {
+const Vec2 BoxCollider::getPoint() const {
     return pc;
 }
 
-Vec2 BoxCollider::getU(){
+const Vec2 BoxCollider::getU() const{
     return u;
 }
-Vec2 BoxCollider::getV(){
+const Vec2 BoxCollider::getV() const{
     return v;
 }
 
-float BoxCollider::getWidth(){
+const float BoxCollider::getWidth() const{
     return width;
 }
 
-float BoxCollider::getHeight(){
+const float BoxCollider::getHeight() const{
     return height;
 }
-
-bool BoxCollider::canDestroy(){return isKiller;}
