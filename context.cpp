@@ -68,6 +68,10 @@ std::optional<DynamicConstraint> Context::checkDynamicContact(Particle& part1, P
     }
 }
 
+void Context::setNbUpdates(int n){
+    nbUpdates = n;
+}
+
 // Update the positions of the particles
 void Context::updatePhysicalSystem(float dt) {
     applyExternalForce(dt);
@@ -79,8 +83,11 @@ void Context::updatePhysicalSystem(float dt) {
     projectConstraints();
     deleteContactConstraints();
 
+    removeLinksWithDeletedParticles();
     destroyParticles();
     updateVelocityAndPosition(dt);
+
+
 }
 
 void Context::applyExternalForce(float dt) {
@@ -164,6 +171,10 @@ void Context::projectConstraints() {
     for(int i=0; i<dynamicConstraints.size(); i++) {
         dynamicConstraints[i].enforceDynamicConstraint();
     }
+
+    for (int i=0; i<particleLinks.size(); i++) {
+        particleLinks[i].enforceParticleLink(nbUpdates);
+    }
 }
 
 
@@ -190,12 +201,13 @@ void Context::deleteContactConstraints() {
 
 /// Destroy the particles after too many collisions
 void Context::destroyParticles() {
-    particles.erase(std::remove_if(particles.begin(),particles.end(), [](Particle part) { return part.checkNbCollisions(); }), particles.end());
+    particles.erase(std::remove_if(particles.begin(),particles.end(), [](Particle part) { return part.checkNbCollisions() | part.getPos().length()>100; }), particles.end());
 }
 
 /// Reset the context (remove all particles)
 void Context::reset() {
     particles.clear();
+    particleLinks.clear();
 }
 
 const bool Context::getCollisionsToggle() const {
@@ -208,7 +220,7 @@ void Context::changeCollisions() {
 
 
 void Context::setSelectedParticle(Vec2 pos) {
-    Particle* part_ptr;
+    Particle* part_ptr = nullptr;
     for (int i=0; i<particles.size(); i++){
         if ((pos-particles[i].getPos()).length()<particles[i].getRad()){
             part_ptr = &particles[i];
@@ -216,8 +228,10 @@ void Context::setSelectedParticle(Vec2 pos) {
         }
 
     }
+    if (part_ptr==nullptr) return;
     if (selectedParticles[0]==nullptr){
         selectedParticles[0] = part_ptr;
+        std::cout<<"works"<<std::endl;
     }  else if (selectedParticles[1]==nullptr){
         selectedParticles[1] = part_ptr;
     }
@@ -225,9 +239,18 @@ void Context::setSelectedParticle(Vec2 pos) {
         selectedParticles[0] = selectedParticles[1];
         selectedParticles[1] = part_ptr;
     }
+    std::cout<< selectedParticles[0] << " " << selectedParticles[1] << std::endl;
 }
 
 void Context::linkSelectedParticles(){
-    std::cout << selectedParticles[0]->getPos() << "\n" << selectedParticles[1]->getPos() << std::endl;
+    ParticleLink link;
+    if (selectedParticles[0]==nullptr | selectedParticles[1]==nullptr | selectedParticles[0]==selectedParticles[1]) return;
+    link.ptr_part1 = selectedParticles[0];
+    link.ptr_part2 = selectedParticles[1];
+    particleLinks.push_back(link);
+    std::cout<<particleLinks.size()<<std::endl;
 }
 
+void Context::removeLinksWithDeletedParticles(){
+    particleLinks.erase(std::remove_if(particleLinks.begin(),particleLinks.end(), [](ParticleLink link) { return link.ptr_part1->checkNbCollisions() | link.ptr_part2->checkNbCollisions(); }), particleLinks.end());
+}

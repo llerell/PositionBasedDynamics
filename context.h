@@ -7,6 +7,7 @@
 #include "planecollider.h"
 #include "spherecollider.h"
 #include "boxcollider.h"
+#include "ParticleLink.h"
 #include <vector>
 #include "vec2.h"
 #include <cmath>
@@ -34,6 +35,8 @@ public:
     /// return std::vector of all DynamicConstraints between particles.
     std::vector<DynamicConstraint>& getDynamicConstraints() ;
 
+    void setNbUpdates(int n);
+
     /// updates all particles and their attributes for the next iteration.
     void updatePhysicalSystem(float dt);
 
@@ -52,6 +55,7 @@ public:
     void reset();
 
     const bool getCollisionsToggle() const ;
+
     void changeCollisions();
 
     /**
@@ -62,13 +66,18 @@ public:
 
     void linkSelectedParticles();
 
-
+    void removeLinksWithDeletedParticles();
 private:
     std::vector<Particle> particles;
     std::vector<std::variant<PlaneCollider,SphereCollider, BoxCollider>> colliders;
     std::vector<StaticConstraint> staticConstraints;
     std::vector<DynamicConstraint> dynamicConstraints;
+    std::vector<ParticleLink> particleLinks;
+    Particle* selectedParticles[2] = {nullptr, nullptr};
+
     bool collisions;
+
+    int nbUpdates;
 
     /// Sets velocity of each particle according to external forces implemented herein.
     void applyExternalForce(float dt);
@@ -97,7 +106,7 @@ private:
     /// delete all contact constraints from the context, both static and dynamic.
     void deleteContactConstraints();
 
-    Particle* selectedParticles[2];
+
 
 };
 

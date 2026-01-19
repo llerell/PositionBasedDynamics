@@ -10,6 +10,7 @@ DrawArea::DrawArea(QWidget *parent)
     int height = 500;
     this->setFixedSize(QSize(height*ratio,height));
     context = Context();
+    context.setNbUpdates(nbUpdates);
     std::srand(std::time({}));
     is_random = false;
     healthPoints = nbUpdates*50;
