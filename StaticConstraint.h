@@ -10,8 +10,21 @@ struct StaticConstraint
     Vec2 pc;
     Vec2 nc;
     Particle* part_ptr;
+
+    /**
+     * @brief solve constraint and adjust expected position of the particle accordingly.
+     */
+    void enforceStaticConstraint();
 };
 
-
+inline void StaticConstraint::enforceStaticConstraint()
+{
+    Vec2 p = this->part_ptr->getExpPos();
+    Vec2 qc = p - (((p - this->pc).dotProduct(this->nc))*this->nc);
+    Vec2 diff = p - qc;
+    float C = diff.dotProduct(this->nc) - this->part_ptr->getRad();
+    Vec2 delta = - C * this->nc;
+    part_ptr->setExpPos(p+delta);
+}
 
 #endif // STATICCONSTRAINT_H

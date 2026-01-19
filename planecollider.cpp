@@ -1,13 +1,16 @@
-#include "plancollider.h"
+#include "planecollider.h"
 #include "vec2.h"
-PlanCollider::PlanCollider(Vec2 pc_, Vec2 nc_)
+
+
+PlaneCollider::PlaneCollider(Vec2 pc_, Vec2 nc_)
     : Collider(), pc(pc_), nc((1.0/nc_.length())*nc_) {
 }
 
-PlanCollider::PlanCollider(Vec2 pc_, Vec2 nc_, bool isKiller_, bool isHealer_)
+
+PlaneCollider::PlaneCollider(Vec2 pc_, Vec2 nc_, bool isKiller_, bool isHealer_)
     : Collider(isKiller_, isHealer_), pc(pc_), nc((1.0/nc_.length())*nc_) {}
 
-std::optional<StaticConstraint> PlanCollider::checkContact(Particle& collider) {
+std::optional<StaticConstraint> PlaneCollider::checkContact(Particle& collider) {
     Vec2 expPos = collider.getExpPos();
     Vec2 diff = expPos - getPoint();
     float ri = collider.getRad();
@@ -22,10 +25,15 @@ std::optional<StaticConstraint> PlanCollider::checkContact(Particle& collider) {
     return {};
 }
 
-Vec2 PlanCollider::getPoint() {
+
+Vec2 PlaneCollider::getPoint() {
     return pc;
 }
 
-Vec2 PlanCollider::getNormal() {
+Vec2 PlaneCollider::getNormal() {
     return nc;
+}
+
+bool PlaneCollider::canDestroy() {
+    return isKiller;
 }

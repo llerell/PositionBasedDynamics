@@ -31,7 +31,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         vec2.h vec2.cpp
         StaticConstraint.h
         collider.h collider.cpp
-        plancollider.h plancollider.cpp
+        planecollider.h planecollider.cpp
         spherecollider.h spherecollider.cpp
         DynamicConstraint.h
         boxcollider.h boxcollider.cpp

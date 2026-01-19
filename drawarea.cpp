@@ -12,7 +12,7 @@ DrawArea::DrawArea(QWidget *parent)
     context = Context();
     std::srand(std::time({}));
     is_random = false;
-    healthPoints = 50;
+    healthPoints = nbUpdates*50;
 }
 
 void DrawArea::paintEvent(QPaintEvent *event)  {
@@ -49,7 +49,8 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
 
     QColor colliderColor;
     for(int i=0; i<context.getColliders().size(); i++) {
-        std::variant<PlanCollider, SphereCollider, BoxCollider> coll_var = context.getColliders()[i];
+
+        std::variant<PlaneCollider, SphereCollider, BoxCollider> coll_var = context.getColliders()[i];
         if(context.getCollisions()) {
             colliderColor = std::visit([this](auto& arg) -> QColor {return arg.getColor();}, coll_var);
         }
@@ -78,9 +79,10 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
     }
 }
 
-void DrawArea::drawCollider(QPainter *painter, PlanCollider planCollider) {
-    Vec2 pc = planCollider.getPoint();
-    Vec2 nc = planCollider.getNormal();
+
+void DrawArea::drawCollider(QPainter *painter, PlaneCollider PlaneCollider) {
+    Vec2 pc = PlaneCollider.getPoint();
+    Vec2 nc = PlaneCollider.getNormal();
     Vec2 p1, p2;
 
     if (nc.getY()!=0){
@@ -108,10 +110,10 @@ void DrawArea::drawCollider(QPainter *painter, BoxCollider boxCollider) {
     Vec2 v = boxCollider.getV();
     float width = boxCollider.getWidth();
     float height = boxCollider.getHeight();
-    Vec2 p1 = worldToView(boxCollider.getCenter() + (width/2 * u) + (height/2 * v));
-    Vec2 p2 = worldToView(boxCollider.getCenter() + (width/2 * u) - (height/2 * v));
-    Vec2 p3 = worldToView(boxCollider.getCenter() - (width/2 * u) + (height/2 * v));
-    Vec2 p4 = worldToView(boxCollider.getCenter() - (width/2 * u) - (height/2 * v));
+    Vec2 p1 = worldToView(boxCollider.getPoint() + (width/2 * u) + (height/2 * v));
+    Vec2 p2 = worldToView(boxCollider.getPoint() + (width/2 * u) - (height/2 * v));
+    Vec2 p3 = worldToView(boxCollider.getPoint() - (width/2 * u) + (height/2 * v));
+    Vec2 p4 = worldToView(boxCollider.getPoint() - (width/2 * u) - (height/2 * v));
 
     QList<QPoint> points;
     points.append(QPoint(p1.getX(), p1.getY()));
@@ -149,7 +151,7 @@ void DrawArea::mouseDoubleClickEvent(QMouseEvent *event) {
 
 void DrawArea::animate() {
     float dt = 0.01;
-    float n = 10;
+    float n = float(nbUpdates);
     for (int i=0; i<n; i++){
         context.updatePhysicalSystem(dt/n);
     }
@@ -170,5 +172,5 @@ void DrawArea::activeCollisions() {
 }
 
 void DrawArea::setHealth(int newHealth) {
-    healthPoints = newHealth;
+    healthPoints = nbUpdates*newHealth;
 }

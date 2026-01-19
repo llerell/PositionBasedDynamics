@@ -1,10 +1,10 @@
 #include "boxcollider.h"
 
-BoxCollider::BoxCollider(Vec2 pc_, Vec2 u_, float width_, float height_):Collider(), pc(pc_), u(u_*(1.0/(u_.length()))), width(width_), height(height_), v(Vec2(-u.getY(), u.getX())) {}
+BoxCollider::BoxCollider(Vec2 pc_, Vec2 u_, float width_, float height_):Collider(), pc(pc_), u(u_*(1.0/(u_.length()))), width(width_), height(height_), v(Vec2(-u.getY(), u.getX())), isKiller(false) {}
 
 
 std::optional<StaticConstraint> BoxCollider::checkContact(Particle& collider) {
-    Vec2 diff = collider.getExpPos()-this->getCenter();
+    Vec2 diff = collider.getExpPos()-this->getPoint();
     Vec2 u = this->getU();
     Vec2 v = this->getV();
     float height = this->getHeight();
@@ -18,28 +18,28 @@ std::optional<StaticConstraint> BoxCollider::checkContact(Particle& collider) {
     if ((x > 0)&&(x < collider.getRad()+width/2.0)  &&  (y>-height/2.0) && (y<height/2.0)){
         StaticConstraint sc;
         sc.nc = u;
-        sc.pc = this->getCenter() + (width/2.0)*u;
+        sc.pc = this->getPoint() + (width/2.0)*u;
         sc.part_ptr=&collider;
         return sc;
 
     } else if ((x<0) && (x > -collider.getRad()-width/2.0)&&  (y>-height/2.0) && (y<height/2.0)){
         StaticConstraint sc;
         sc.nc = -1*u;
-        sc.pc = this->getCenter() - (width/2.0)*u;
+        sc.pc = this->getPoint() - (width/2.0)*u;
         sc.part_ptr=&collider;
         return sc;
     }
     if ((y > 0)&&(y < collider.getRad()+height/2.0) &&  (x>-width/2.0) && (x<width/2.0)){
         StaticConstraint sc;
         sc.nc = v;
-        sc.pc = this->getCenter() + (height/2.0)*v;
+        sc.pc = this->getPoint() + (height/2.0)*v;
         sc.part_ptr=&collider;
         return sc;
 
     } else if (( y <0) && (y > -collider.getRad()-height/2.0)&&  (x>-width/2.0) && (x<width/2.0)){
         StaticConstraint sc;
         sc.nc = -1*v;
-        sc.pc = this->getCenter() - (height/2.0)*v;
+        sc.pc = this->getPoint() - (height/2.0)*v;
         sc.part_ptr=&collider;
         return sc;
     }
@@ -47,10 +47,10 @@ std::optional<StaticConstraint> BoxCollider::checkContact(Particle& collider) {
     // coins : contraintes linéarisées originant de chaque coin
     // les autres vérifications ont été réalisées précédemment
 
-    Vec2 p1 = this->getCenter()+(width/2)*u+(height/2)*v;
-    Vec2 p2 = this->getCenter()-(width/2)*u+(height/2)*v;
-    Vec2 p3 = this->getCenter()-(width/2)*u-(height/2)*v;
-    Vec2 p4 = this->getCenter()+(width/2)*u-(height/2)*v;
+    Vec2 p1 = this->getPoint()+(width/2)*u+(height/2)*v;
+    Vec2 p2 = this->getPoint()-(width/2)*u+(height/2)*v;
+    Vec2 p3 = this->getPoint()-(width/2)*u-(height/2)*v;
+    Vec2 p4 = this->getPoint()+(width/2)*u-(height/2)*v;
 
     Vec2 p[4] = {p1,p2,p3,p4};
 
@@ -68,7 +68,7 @@ std::optional<StaticConstraint> BoxCollider::checkContact(Particle& collider) {
     return {};
 }
 
-Vec2 BoxCollider::getCenter() {
+Vec2 BoxCollider::getPoint() {
     return pc;
 }
 
@@ -87,3 +87,4 @@ float BoxCollider::getHeight(){
     return height;
 }
 
+bool BoxCollider::canDestroy(){return isKiller;}

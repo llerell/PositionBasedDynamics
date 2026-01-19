@@ -6,7 +6,7 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include <QOpenGLFunctions>
-#include "plancollider.h"
+#include "planecollider.h"
 #include "spherecollider.h"
 #include "vec2.h"
 
@@ -22,14 +22,22 @@ public:
 
     void show(QPainter *painter, QPaintEvent *event, Context& context);
 
-    void drawCollider(QPainter *painter, PlanCollider plancollider);
-    void drawCollider(QPainter *painter, SphereCollider spherCollider);
+    /// draw a Plane collider.
+    void drawCollider(QPainter *painter, PlaneCollider PlaneCollider);
+
+    /// draw a Spherical collider.
+    void drawCollider(QPainter *painter, SphereCollider sphereCollider);
+
+    /// draw a rectangular collider.
     void drawCollider(QPainter *painter, BoxCollider boxCollider);
 
+    /// create a particle at every double click input.
     void mouseDoubleClickEvent(QMouseEvent *event) override;
 
+    /// call update to physical system multiple times before showing the result.
     void animate();
 
+    /// reset context.
     void reset();
 
     void randomColor();
@@ -40,8 +48,10 @@ public:
 
 
 private:
+    /// translate physical system coordinates in pixel coordinates.
     Vec2 worldToView(Vec2 world_pos);
 
+    /// translate pixel coordinates in physical system coordinates.
     Vec2 viewToWorld(Vec2 view_pos);
 
     Context context;
@@ -54,10 +64,11 @@ private:
 
     int healthPoints;
 
+    int nbUpdates = 10;
+
     QColor defaultColliderColor = Qt::black;
     QColor defaultPartColor = Qt::gray;
 
-signals:
 };
 
 #endif // DRAWAREA_H

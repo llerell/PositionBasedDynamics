@@ -29,6 +29,3 @@ float SphereCollider::getRadius() {
     return rc;
 }
 
-//bool SphereCollider::canDestroy() {
-//    return isKiller;
-//}
