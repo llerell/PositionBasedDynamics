@@ -205,3 +205,29 @@ const bool Context::getCollisionsToggle() const {
 void Context::changeCollisions() {
     collisions = !(collisions);
 }
+
+
+void Context::setSelectedParticle(Vec2 pos) {
+    Particle* part_ptr;
+    for (int i=0; i<particles.size(); i++){
+        if ((pos-particles[i].getPos()).length()<particles[i].getRad()){
+            part_ptr = &particles[i];
+            break; // ensure only one is selected
+        }
+
+    }
+    if (selectedParticles[0]==nullptr){
+        selectedParticles[0] = part_ptr;
+    }  else if (selectedParticles[1]==nullptr){
+        selectedParticles[1] = part_ptr;
+    }
+    else{
+        selectedParticles[0] = selectedParticles[1];
+        selectedParticles[1] = part_ptr;
+    }
+}
+
+void Context::linkSelectedParticles(){
+    std::cout << selectedParticles[0]->getPos() << "\n" << selectedParticles[1]->getPos() << std::endl;
+}
+

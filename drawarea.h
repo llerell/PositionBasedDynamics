@@ -34,6 +34,9 @@ public:
     /// create a particle at every double click input.
     void mouseDoubleClickEvent(QMouseEvent *event) override;
 
+    /// select particles to link
+    void mousePressEvent(QMouseEvent *event) override;
+
     /// call update to physical system multiple times before showing the result.
     void animate();
 
@@ -45,6 +48,8 @@ public:
     void activeCollisions();
 
     void setHealth(int newHealth);
+
+    void link();
 
 
 private:

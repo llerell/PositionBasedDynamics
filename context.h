@@ -54,6 +54,15 @@ public:
     const bool getCollisionsToggle() const ;
     void changeCollisions();
 
+    /**
+     * @brief setSelectedParticle set selected particle to particle that contains pos.
+     * @param pos
+     */
+    void setSelectedParticle(Vec2 pos);
+
+    void linkSelectedParticles();
+
+
 private:
     std::vector<Particle> particles;
     std::vector<std::variant<PlaneCollider,SphereCollider, BoxCollider>> colliders;
@@ -87,6 +96,8 @@ private:
 
     /// delete all contact constraints from the context, both static and dynamic.
     void deleteContactConstraints();
+
+    Particle* selectedParticles[2];
 
 };
 

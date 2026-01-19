@@ -149,6 +149,13 @@ void DrawArea::mouseDoubleClickEvent(QMouseEvent *event) {
     this->update();
 }
 
+void DrawArea::mousePressEvent(QMouseEvent *event){
+    QPointF position = event->position();
+    Vec2 viewPos = Vec2(position.x(), position.y());
+    Vec2 worldPos = viewToWorld(viewPos);
+    context.setSelectedParticle(worldPos);
+}
+
 void DrawArea::animate() {
     float dt = 0.01;
     float n = float(nbUpdates);
@@ -173,4 +180,8 @@ void DrawArea::activeCollisions() {
 
 void DrawArea::setHealth(int newHealth) {
     healthPoints = nbUpdates*newHealth;
+}
+
+void DrawArea::link(){
+    context.linkSelectedParticles();
 }

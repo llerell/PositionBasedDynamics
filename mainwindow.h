@@ -34,6 +34,7 @@ private:
     QLabel *label;
     QSpinBox *health_number;
     DrawArea *draw_area;
+    QPushButton *link_button;
     int nb_milliseconds;
 };
 #endif // MAINWINDOW_H
