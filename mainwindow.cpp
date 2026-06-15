@@ -20,9 +20,8 @@ MainWindow::MainWindow(QWidget *parent)
     label = new QLabel("Number of health points:");
     link_button  = new QPushButton("link");
     health_number = new QSpinBox();
+    health_number->setValue(50);
     health_number->setMaximum(1000);
-
-    nb_milliseconds = 10;
 
     QVBoxLayout *layout = new QVBoxLayout(ui->centralwidget); // constructor’s parameter is the widget that will use the layout
 
@@ -35,8 +34,8 @@ MainWindow::MainWindow(QWidget *parent)
     layout->addWidget(link_button);
 
     QObject::connect(reset_button, &QPushButton::clicked, draw_area, &DrawArea::reset);
-    QObject::connect(random_colors, &QCheckBox::checkStateChanged, draw_area, &DrawArea::randomColor);
-    QObject::connect(active_collisions, &QCheckBox::checkStateChanged, draw_area, &DrawArea::activeCollisions);
+    QObject::connect(random_colors, &QCheckBox::stateChanged, draw_area, &DrawArea::randomColor);
+    QObject::connect(active_collisions, &QCheckBox::stateChanged, draw_area, &DrawArea::toggleCollisions);
     QObject::connect(health_number, &QSpinBox::valueChanged, [this] (int result) {draw_area->setHealth(result);});
     QObject::connect(link_button, &QPushButton::clicked, draw_area, &DrawArea::link);
     // Animate: Timer

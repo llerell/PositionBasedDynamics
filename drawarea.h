@@ -20,6 +20,7 @@ public:
 
     void initializeGL() override;
 
+    /// show the objects on the stage
     void show(QPainter *painter, QPaintEvent *event, Context& context);
 
     /// draw a Plane collider.
@@ -43,36 +44,59 @@ public:
     /// reset context.
     void reset();
 
+    /// active or desactive the random colors for the particles.
     void randomColor();
 
-    void activeCollisions();
 
-    void setHealth(int newHealth);
+    /// active or desactive the destruction of the particles.
+    void toggleCollisions();
+
+
+    /// change the maximum health points of the particles.
+    void setHealth(const int newHealth);
 
     void link();
 
 
 private:
-    /// translate physical system coordinates in pixel coordinates.
-    Vec2 worldToView(Vec2 world_pos);
-
-    /// translate pixel coordinates in physical system coordinates.
-    Vec2 viewToWorld(Vec2 view_pos);
-
     Context context;
 
-    float m_height = 10;
+    /// height in meters
+    const float m_height = 10;
+    /// width in meters
+    const float m_width = 15;
 
-    float m_width = 15;
-
+    /// whether the particles appear with a random color.
     bool is_random;
-
+    /// maximum health points of the particles
     int healthPoints;
 
+    /// number of times the physical system is updated betwteen two frames
     int nbUpdates = 10;
 
+    /// default color for the collider (when context.collisions is false)
     QColor defaultColliderColor = Qt::black;
+    /// default color for the particles (when is_random is false)
     QColor defaultPartColor = Qt::gray;
+
+
+    /// translate physical system coordinates in pixel coordinates.
+    const Vec2 worldToView(const Vec2 world_pos) const;
+
+    /// translate pixel coordinates in physical system coordinates.
+    const Vec2 viewToWorld(const Vec2 view_pos) const;
+
+    /// draw a Plane collider.
+    void drawCollider(QPainter *painter, const PlaneCollider PlaneCollider);
+
+    /// draw a Spherical collider.
+    void drawCollider(QPainter *painter, const SphereCollider sphereCollider);
+
+    /// draw a rectangular collider.
+    void drawCollider(QPainter *painter, const BoxCollider boxCollider);
+
+    /// create a particle at every double click input.
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
 
 };
 

@@ -28,13 +28,20 @@ public:
 
 private:
     Ui::MainWindow *ui; // Classe générée automatiquement à partir d’un fichier .ui décrivant le contenu de l’interface graphique
+
+    /// scene
+    DrawArea *draw_area;
+    /// button to reset the scene
     QPushButton *reset_button;
+    /// check box to activate or desactivate random colors for the particles
     QCheckBox *random_colors;
+    /// check box to activate or desactivate health points of the particles
     QCheckBox *active_collisions;
+    /// choose how many health points the particles have
     QLabel *label;
     QSpinBox *health_number;
     DrawArea *draw_area;
     QPushButton *link_button;
-    int nb_milliseconds;
+    const int nb_milliseconds = 10;
 };
 #endif // MAINWINDOW_H

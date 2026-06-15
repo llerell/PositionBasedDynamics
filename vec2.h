@@ -3,10 +3,22 @@
 #include <cmath>
 #include <iostream>
 
-
+/**
+ * @brief The Vec2 class implements 2-dimensional vectors with float coordinates.
+ */
 class Vec2 {
 public:
+    /**
+     * @brief Vec2 Constructor for 2D vector
+     * @param x_
+     * @param y_
+     */
     Vec2(float x_, float y_);
+
+    /**
+     * @brief Vec2 default constructor for Vec2
+     * default value is (0,0)
+     */
     Vec2();
 
     const Vec2 operator+(const Vec2& v) const;

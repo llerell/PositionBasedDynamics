@@ -6,33 +6,45 @@
 #include <optional>
 
 
-// Abstract class that defines colliders objects
+// Abstract class that defines collider objects
 class Collider
 {
 public:
+    /**
+     * @brief Collider
+     * default role is 0 (neutral collider)
+     * default color is black
+     */
     Collider();
-    Collider(bool isKiller_, bool isHealer_);
 
+    /**
+     * @brief Collider
+     * color is defined based on the role
+     * @param role_ whether the collider can destroy or heal the particles
+     */
+    Collider(const int role_);
+
+    /// Destructor for Collider class.
     virtual ~Collider() {}
 
     /**
      * @brief check if collider is in contact with the collider.
      * If so, returns the corresponding StaticConstraint.
      * @param collider Particle to check
-     * @return StaticConstraint corresponding to the plane and the particle.
+     * @return StaticConstraint corresponding to the collider and the particle if in contact.
      */
-    virtual auto checkContact(Particle& collider)-> std::optional<StaticConstraint> =0;
+    virtual const std::optional<StaticConstraint> checkContact(Particle& collider) =0;
 
     virtual const Vec2 getPoint() const = 0;
 
-    const bool canDestroy() const;
-    const bool canHeal() const;
+    const int getRole() const;
 
     const QColor getColor() const;
 
 protected:
-    bool isKiller;  // If the collider can destroy the particles
-    bool isHealer;  // If the collider can "heal" the particles
+    /// Role of the collider
+    /// 0 if the collider does nothing, 1 if it can destroy the particles, 2 if it can heal them
+    const int role;
     QColor color;
 };
 
