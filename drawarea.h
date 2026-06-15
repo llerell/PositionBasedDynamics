@@ -23,17 +23,6 @@ public:
     /// show the objects on the stage
     void show(QPainter *painter, QPaintEvent *event, Context& context);
 
-    /// draw a Plane collider.
-    void drawCollider(QPainter *painter, PlaneCollider PlaneCollider);
-
-    /// draw a Spherical collider.
-    void drawCollider(QPainter *painter, SphereCollider sphereCollider);
-
-    /// draw a rectangular collider.
-    void drawCollider(QPainter *painter, BoxCollider boxCollider);
-
-    /// create a particle at every double click input.
-    void mouseDoubleClickEvent(QMouseEvent *event) override;
 
     /// select particles to link
     void mousePressEvent(QMouseEvent *event) override;

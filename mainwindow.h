@@ -40,7 +40,6 @@ private:
     /// choose how many health points the particles have
     QLabel *label;
     QSpinBox *health_number;
-    DrawArea *draw_area;
     QPushButton *link_button;
     const int nb_milliseconds = 10;
 };

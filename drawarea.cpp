@@ -33,7 +33,7 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
     const int height = this->height();
 
     painter->fillRect(event->rect(), QBrush(Qt::white));
-    std::vector<Particle> particles = context.getParticles();
+    auto particles = context.getParticles();
 
     // draw colliders
     QColor colliderColor;
@@ -55,14 +55,14 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
     // draw particles
     Vec2 viewPos;
     for(int i=0; i<context.getNbParticles(); i++) {
-        const Particle part = particles[i];
+        auto part = particles[i];
 
         // translate in view coordinates
-        viewPos=worldToView(part.getPos());
-        const float rad = height*part.getRad()/m_height;
+        viewPos=worldToView(part->getPos());
+        const float rad = height*part->getRad()/m_height;
 
-        painter->setPen(part.getColor());
-        painter->setBrush(QBrush(part.getColor()));
+        painter->setPen(part->getColor());
+        painter->setBrush(QBrush(part->getColor()));
         const QRectF target(viewPos.getX()-rad, viewPos.getY()-rad, rad*2, rad*2);
         painter->drawEllipse(target);
 
@@ -180,32 +180,6 @@ void DrawArea::mousePressEvent(QMouseEvent *event){
     Vec2 viewPos = Vec2(position.x(), position.y());
     Vec2 worldPos = viewToWorld(viewPos);
     context.setSelectedParticle(worldPos);
-}
-
-void DrawArea::animate() {
-    float dt = 0.01;
-    float n = float(nbUpdates);
-    for (int i=0; i<n; i++){
-        context.updatePhysicalSystem(dt/n);
-    }
-    this->update();
-}
-
-void DrawArea::reset() {
-    context.reset();
-    this->update();
-}
-
-void DrawArea::randomColor() {
-    is_random = !(is_random);
-}
-
-void DrawArea::activeCollisions() {
-    context.changeCollisions();
-}
-
-void DrawArea::setHealth(int newHealth) {
-    healthPoints = nbUpdates*newHealth;
 }
 
 void DrawArea::link(){

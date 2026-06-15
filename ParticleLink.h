@@ -3,8 +3,8 @@
 #include "particle.h"
 
 struct ParticleLink {
-    Particle* ptr_part1;
-    Particle* ptr_part2;
+    std::shared_ptr<Particle> ptr_part1;
+    std::shared_ptr<Particle> ptr_part2;
     ~ParticleLink() = default;
 
     /**
@@ -15,6 +15,8 @@ struct ParticleLink {
 
 inline void ParticleLink::enforceParticleLink(int nbUpdates) {
     std::cout<<"enforcing between " << ptr_part1 << " and " << ptr_part2 <<std::endl;
+
+    if (!ptr_part1 || !ptr_part2) return;
     Vec2 p1 = ptr_part1->getExpPos();
     Vec2 p2 = ptr_part2->getExpPos();
     float r1 = ptr_part1->getRad();
