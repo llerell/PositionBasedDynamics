@@ -6,6 +6,7 @@
 #include "planecollider.h"
 #include "spherecollider.h"
 #include "boxcollider.h"
+#include "ParticleLink.h"
 #include <vector>
 #include <cmath>
 
@@ -21,7 +22,7 @@ public:
     const int getNbParticles() const;
 
     /// return std::vector of all particles listed in the context.
-    const std::vector<Particle>& getParticles() const;
+    const std::vector<std::shared_ptr<Particle>>& getParticles() const;
 
     /**
      * @brief getColliders
@@ -32,8 +33,13 @@ public:
     /// get whether the particles can be destroyed.
     const bool getCollisionsToggle() const ;
 
+    void setNbUpdates(int n);
+
     /// updates all particles and their attributes for the next iteration.
     void updatePhysicalSystem(const float dt);
+
+    std::vector<DynamicConstraint>& getDynamicConstraints();
+
 
     /// Destroys particles after too many collisions.
     void destroyParticles();
@@ -41,15 +47,28 @@ public:
     /// Reset the context (remove all particles).
     void reset();
 
-    /// Active or desactive the destruction of the particles.
     void changeCollisions();
 
+    /**
+     * @brief setSelectedParticle set selected particle to particle that contains pos.
+     * @param pos
+     */
+    void setSelectedParticle(Vec2 pos);
+
+    void linkSelectedParticles();
+
+    void removeLinksWithDeletedParticles();
 private:
-    std::vector<Particle> particles;
+    std::vector<std::shared_ptr<Particle>> particles;
     std::vector<std::variant<PlaneCollider,SphereCollider, BoxCollider>> colliders;
     std::vector<StaticConstraint> staticConstraints;
     std::vector<DynamicConstraint> dynamicConstraints;
+    std::vector<ParticleLink> particleLinks;
+    std::shared_ptr<Particle> selectedParticles[2] = {nullptr, nullptr};
+
     bool collisions;
+
+    int nbUpdates;
 
     /// Sets velocity of each particle according to external forces implemented herein.
     void applyExternalForce(const float dt);
@@ -75,7 +94,7 @@ private:
      * @param part1, part2 Particle& input
      * @returns std::optional value containing DynamicContact if contact is detected.
      */
-    const std::optional<DynamicConstraint> checkDynamicContact(Particle& part1, Particle& part2);
+    std::optional<DynamicConstraint> checkDynamicContact(std::shared_ptr<Particle> part1, std::shared_ptr<Particle> part2);
 
     /// Calculate new positions of each particle according to all constraints.
     void projectConstraints();
@@ -85,6 +104,8 @@ private:
 
     /// delete all contact constraints from the context, both static and dynamic.
     void deleteContactConstraints();
+
+
 
 };
 

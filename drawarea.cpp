@@ -10,6 +10,7 @@ DrawArea::DrawArea(QWidget *parent)
     const int height = 500;
     this->setFixedSize(QSize(height*ratio,height));
     context = Context();
+    context.setNbUpdates(nbUpdates);
     std::srand(std::time({}));
     is_random = false;
     healthPoints = nbUpdates*50;
@@ -32,7 +33,7 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
     const int height = this->height();
 
     painter->fillRect(event->rect(), QBrush(Qt::white));
-    std::vector<Particle> particles = context.getParticles();
+    auto particles = context.getParticles();
 
     // draw colliders
     QColor colliderColor;
@@ -54,14 +55,14 @@ void DrawArea::show(QPainter *painter, QPaintEvent *event, Context& context) {
     // draw particles
     Vec2 viewPos;
     for(int i=0; i<context.getNbParticles(); i++) {
-        const Particle part = particles[i];
+        auto part = particles[i];
 
         // translate in view coordinates
-        viewPos=worldToView(part.getPos());
-        const float rad = height*part.getRad()/m_height;
+        viewPos=worldToView(part->getPos());
+        const float rad = height*part->getRad()/m_height;
 
-        painter->setPen(part.getColor());
-        painter->setBrush(QBrush(part.getColor()));
+        painter->setPen(part->getColor());
+        painter->setBrush(QBrush(part->getColor()));
         const QRectF target(viewPos.getX()-rad, viewPos.getY()-rad, rad*2, rad*2);
         painter->drawEllipse(target);
 
@@ -172,4 +173,15 @@ void DrawArea::mouseDoubleClickEvent(QMouseEvent *event) {
     Particle particle = Particle(worldPos, Vec2(), 0.5, 1, healthPoints, color);
     context.addParticle(particle);
     this->update();
+}
+
+void DrawArea::mousePressEvent(QMouseEvent *event){
+    QPointF position = event->position();
+    Vec2 viewPos = Vec2(position.x(), position.y());
+    Vec2 worldPos = viewToWorld(viewPos);
+    context.setSelectedParticle(worldPos);
+}
+
+void DrawArea::link(){
+    context.linkSelectedParticles();
 }

@@ -23,6 +23,10 @@ public:
     /// show the objects on the stage
     void show(QPainter *painter, QPaintEvent *event, Context& context);
 
+
+    /// select particles to link
+    void mousePressEvent(QMouseEvent *event) override;
+
     /// call update to physical system multiple times before showing the result.
     void animate();
 
@@ -39,6 +43,8 @@ public:
 
     /// change the maximum health points of the particles.
     void setHealth(const int newHealth);
+
+    void link();
 
 
 private:

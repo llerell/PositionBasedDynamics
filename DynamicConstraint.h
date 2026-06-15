@@ -4,13 +4,10 @@
 #include "particle.h"
 
 struct DynamicConstraint {
-    Particle* ptr_part1;
-    Particle* ptr_part2;
+    std::shared_ptr<Particle> ptr_part1;
+    std::shared_ptr<Particle> ptr_part2;
     ~DynamicConstraint() {}
 
-    /**
-     * @brief solve constraint and adjust expected positions of both particles accordingly.
-     */
     void enforceDynamicConstraint();
 };
 
